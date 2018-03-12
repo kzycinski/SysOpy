@@ -1,0 +1,2 @@
+/usr/bin/ar.exe qc libsysopy.a  CMakeFiles/sysopy.dir/library.c.o CMakeFiles/sysopy.dir/main.c.o
+/usr/bin/ranlib.exe libsysopy.a
