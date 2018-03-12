@@ -13,9 +13,9 @@ struct array_struct{
 
 struct array_struct *create_struct(int blocks, int block_size, int is_static);
 void delete_array(struct array_struct *arr_struct);
-void add_block(struct array_struct *arr_struct, int index, int size, char *block);
+void add_block(struct array_struct *arr_struct, int index, char *block);
 void delete_block(struct array_struct *arr_struct, int index);
-char *find_closest_block_sum(struct array_struct *arr_struct, int index);
+char *findBlock(struct array_struct *arr_struct, int index);
 
 
 #endif //SYSOPY_LIBRARY_H

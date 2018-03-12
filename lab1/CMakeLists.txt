@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
-project(sysopy C)
+project(lab1 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_library(sysopy library.c library.h main.c)
+add_library(lab1 library.c library.h)

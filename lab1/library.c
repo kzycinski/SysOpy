@@ -1,9 +1,9 @@
 #include "library.h"
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <memory.h>
-
+#include <limits.h>
 
 
 char static_array[STATIC_ARRAY_SIZE][STATIC_BLOCK_SIZE];
@@ -42,7 +42,7 @@ void delete_block(struct array_struct *arr_struct, int index){
 
     free(arr_struct->array[index]);
 }
-void add_block(struct array_struct *arr_struct, int index, int size, char *block){
+void add_block(struct array_struct *arr_struct, int index, char *block){
     if (index < 0 || index > arr_struct -> blocks) return;
     if (arr_struct -> array[index] != NULL) return;
     if (strlen(block) >= arr_struct -> block_size) return;
@@ -58,27 +58,23 @@ int calculate_block(char *block){
     }
     return tmp;
 }
-char *find_closest_block_sum(struct array_struct *arr_struct, int index){
+char *findBlock(struct array_struct *arr_struct, int index) {
     if (index < 0 || index >= arr_struct -> blocks) return NULL;
     if (arr_struct -> array[index] == NULL) return NULL;
 
-    char *closest = NULL;
+    char* closest = NULL;
     int min_difference = INT_MAX;
-    int value = calculate_block(arr_struct -> array[index]);
-    int tmp_sum;
+    int sum = calculate_block(arr_struct->array[index]);
 
-    for(int i = 0; i < index ; i++) {
-        tmp_sum = calculate_block(arr_struct -> array[i]);
-        if(abs(tmp_sum - value) < min_difference){
-            min_difference = abs(tmp_sum - value);
-            closest = arr_struct -> array[i];
-        }
-    }
-    for(int i = index+1; i < arr_struct -> blocks ; i++) {
-        tmp_sum = calculate_block(arr_struct->array[i]);
-        if (abs(tmp_sum - value) < min_difference) {
-            min_difference = abs(tmp_sum - value);
-            closest = arr_struct->array[i];
+    for(int i = 0; i < arr_struct->blocks; i++){
+        if(i==index) continue;
+        char* block = arr_struct->array[i];
+        if(block != NULL){
+            int tmp = abs(calculate_block(block) - sum);
+            if(min_difference > tmp){
+                min_difference = tmp;
+                closest = block;
+            }
         }
     }
     return closest;
