@@ -11,8 +11,6 @@ struct array_struct{
 #define STATIC_ARRAY_SIZE 100000
 #define STATIC_BLOCK_SIZE 1000
 
-extern char static_array[STATIC_ARRAY_SIZE][STATIC_BLOCK_SIZE];
-
 struct array_struct *create_struct(int blocks, int block_size, int is_static);
 void delete_array(struct array_struct *arr_struct);
 void add_block(struct array_struct *arr_struct, int index, char *block);
