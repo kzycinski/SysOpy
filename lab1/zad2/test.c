@@ -7,8 +7,10 @@
 #include <stdlib.h>
 #include <zconf.h>
 #include <sys/times.h>
+#include <sys/time.h>
 #include <memory.h>
 #include <time.h>
+#include <sys/resource.h>
 
 char *operation_print;
 int continued = 0;
@@ -35,16 +37,38 @@ void add_blocks(struct array_struct *arr_struct, int start_index, int number_of_
         add_block(arr_struct, i, tmp);
     }
 }
-double calculate_timediff(clock_t start, clock_t end){
-    return (double)((end - start) / sysconf(_SC_CLK_TCK));
+float calculate_system_timediff(struct rusage *r_usage, int step_counter){
+    if(step_counter == 0) {
+        return (((float)(r_usage[step_counter].ru_stime.tv_sec) * 1000000) + r_usage[step_counter].ru_stime.tv_usec) / 1000000;
+    }
+    else {
+        float x = r_usage[step_counter].ru_stime.tv_sec - r_usage[step_counter - 1].ru_stime.tv_sec;
+        float y = r_usage[step_counter].ru_stime.tv_usec - r_usage[step_counter - 1].ru_stime.tv_usec;
+        return ((x * 1000000)
+                + y) / 1000000;
+    }
 }
-void print_time(clock_t start_time, clock_t end_time, struct tms tms_start, struct tms tms_end, FILE *file){
-    printf("Real time: %lf    ", calculate_timediff(start_time, end_time));
-    printf("User time: %lf    ", calculate_timediff(tms_start.tms_utime, tms_end.tms_utime));
-    printf("System time: %lf    \n", calculate_timediff(tms_start.tms_stime, tms_end.tms_stime));
-    fprintf(file, "Real time: %lf    ", calculate_timediff(start_time, end_time));
-    fprintf(file, "User time: %lf    ", calculate_timediff(tms_start.tms_utime, tms_end.tms_utime));
-    fprintf(file, "System time: %lf    \n", calculate_timediff(tms_start.tms_stime, tms_end.tms_stime));
+float calculate_user_timediff(struct rusage *r_usage, int step_counter){
+    if(step_counter == 0) {
+        return (((float)(r_usage[step_counter].ru_stime.tv_sec) * 1000000) + r_usage[step_counter].ru_stime.tv_usec) / 1000000;
+    }
+    else {
+        float x = r_usage[step_counter].ru_utime.tv_sec - r_usage[step_counter - 1].ru_utime.tv_sec;
+        float y = r_usage[step_counter].ru_utime.tv_usec - r_usage[step_counter - 1].ru_utime.tv_usec;
+        return ((x * 1000000)
+               + y) / 1000000;
+    }
+}
+double calculate_real_timediff(struct timeval start, struct timeval end){
+    return (((double)end.tv_sec * 1000000 + end.tv_usec)-((double) start.tv_sec* 1000000+ start.tv_usec))/1000000;
+}
+void print_time(struct timeval real_start, struct timeval real_end, struct rusage *r_usage, FILE *file, int step_counter){
+    printf("Real time: %lf    ", calculate_real_timediff(real_start, real_end));
+    printf("User time: %lf    ", calculate_user_timediff(r_usage,step_counter));
+    printf("System time: %lf    \n", calculate_system_timediff(r_usage,step_counter));
+    fprintf(file, "Real time: %lf    ", calculate_real_timediff(real_start, real_end));
+    fprintf(file, "User time: %lf    ", calculate_user_timediff(r_usage,step_counter));
+    fprintf(file, "System time: %lf    \n", calculate_system_timediff(r_usage,step_counter));
 }
 void make_operation(struct array_struct *arrstruct, char *operation, int parameter, int block_length){
     if(strcmp(operation, "find") == 0){
@@ -99,55 +123,68 @@ int main(int argc, char *argv[]){
     printf("Array Size: %d   Block Length: %d   Allocation: %d\n", array_size, block_length, is_static);
     fprintf(file, "Array Size: %d   Block Length: %d   Allocation: %d\n", array_size, block_length, is_static);
 
-    clock_t *real_time = (clock_t*) malloc(8 * sizeof(clock_t));
-    struct tms *tms_time[8];
-    for (int i = 0; i < 8; i++) {
-        tms_time[i] = malloc(sizeof(struct tms*));
-    }
 
-    real_time[0] = times(tms_time[0]);
+    struct timeval start, end;
+    struct rusage *r_usage = malloc(5 * sizeof(r_usage));
+    int step_counter = 0;
 
-    for(int i = 0 ; i < 10000 ; i++) {
+    gettimeofday(&start, NULL);
+
+    for(int i = 0 ; i < 1000000 ; i++) {
         create_struct(array_size, block_length, is_static);
     }
-    real_time[1] = times(tms_time[1]);
+    gettimeofday(&end, NULL);
+    getrusage(RUSAGE_SELF, &r_usage[step_counter]);
 
     struct array_struct *arrstruct = create_struct(array_size, block_length, is_static);
 
     printf("Create array:\n");
     fprintf(file, "Create array:\n");
-    print_time(real_time[0], real_time[1], *tms_time[0], *tms_time[1], file);
+    print_time(start,end,r_usage,file,step_counter);
 
-    real_time[2] = times(tms_time[2]);
+    step_counter++;
+
+    gettimeofday(&start, NULL);
 
     add_blocks(arrstruct,0,arrstruct -> blocks, arrstruct -> block_size);
 
-    real_time[3] = times(tms_time[3]);
+    gettimeofday(&end, NULL);
+    getrusage(RUSAGE_SELF, &r_usage[step_counter]);
 
     printf("Fill array:\n");
     fprintf(file, "Fill array:\n");
-    print_time(real_time[2], real_time[3], *tms_time[2], *tms_time[3], file);
+    print_time(start,end,r_usage,file,step_counter);
+
+    step_counter++;
 
     if(argc > 5) {
-        real_time[4] = times(tms_time[4]);
-        make_operation(arrstruct, argv[4], (int) strtol(argv[5], NULL, 10), block_length);
-        real_time[5] = times(tms_time[5]);
+        gettimeofday(&start, NULL);
 
-            printf("%s", operation_print);
-            fprintf(file, "%s", operation_print);
-            print_time(real_time[4], real_time[5], *tms_time[4], *tms_time[5], file);
+        make_operation(arrstruct, argv[4], (int) strtol(argv[5], NULL, 10), block_length);
+
+        gettimeofday(&end, NULL);
+        getrusage(RUSAGE_SELF, &r_usage[step_counter]);
+
+        printf("%s", operation_print);
+        fprintf(file, "%s", operation_print);
+        print_time(start,end,r_usage,file,step_counter);
+
+        step_counter++;
     }
     if(argc > 7) {
-        real_time[6] = times(tms_time[6]);
-        make_operation(arrstruct, argv[6], (int) strtol(argv[7], NULL, 10), block_length);
-        real_time[7] = times(tms_time[7]);
+        gettimeofday(&start, NULL);
 
-            printf("%s", operation_print);
-            fprintf(file, "%s", operation_print);
-            print_time(real_time[6], real_time[7], *tms_time[6], *tms_time[7], file);
+        make_operation(arrstruct, argv[6], (int) strtol(argv[7], NULL, 10), block_length);
+
+        gettimeofday(&end, NULL);
+        getrusage(RUSAGE_SELF, &r_usage[step_counter]);
+
+        printf("%s", operation_print);
+        fprintf(file, "%s", operation_print);
+        print_time(start,end,r_usage, file, step_counter);
     }
 
-    fclose(file);
+    //fclose(file);
 
 
 }
