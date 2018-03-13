@@ -58,3 +58,6 @@ Makefile2
 CMakeFiles/
 cmake-build-debug/
 zad2/CMakeFiles
+test
+main
+zad2/test
