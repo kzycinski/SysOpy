@@ -39,10 +39,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/krystian/clion-2017.3.4/bin/cmake/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /home/krystian/clion-2017.3.4/bin/cmake/bin/cmake -E remove -f
+RM = /usr/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -56,27 +56,38 @@ CMAKE_BINARY_DIR = /home/krystian/sysopy/lab1
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/krystian/clion-2017.3.4/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/krystian/clion-2017.3.4/bin/cmake/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -111,17 +122,514 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named lab1
+# Target rules for targets named main-O1
 
 # Build rule for target.
-lab1: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 lab1
-.PHONY : lab1
+main-O1: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main-O1
+.PHONY : main-O1
 
 # fast build rule for target.
-lab1/fast:
-	$(MAKE) -f CMakeFiles/lab1.dir/build.make CMakeFiles/lab1.dir/build
-.PHONY : lab1/fast
+main-O1/fast:
+	$(MAKE) -f CMakeFiles/main-O1.dir/build.make CMakeFiles/main-O1.dir/build
+.PHONY : main-O1/fast
+
+#=============================================================================
+# Target rules for targets named dynamiclib-O1
+
+# Build rule for target.
+dynamiclib-O1: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dynamiclib-O1
+.PHONY : dynamiclib-O1
+
+# fast build rule for target.
+dynamiclib-O1/fast:
+	$(MAKE) -f CMakeFiles/dynamiclib-O1.dir/build.make CMakeFiles/dynamiclib-O1.dir/build
+.PHONY : dynamiclib-O1/fast
+
+#=============================================================================
+# Target rules for targets named dmain
+
+# Build rule for target.
+dmain: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dmain
+.PHONY : dmain
+
+# fast build rule for target.
+dmain/fast:
+	$(MAKE) -f CMakeFiles/dmain.dir/build.make CMakeFiles/dmain.dir/build
+.PHONY : dmain/fast
+
+#=============================================================================
+# Target rules for targets named sharedlib-O1
+
+# Build rule for target.
+sharedlib-O1: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sharedlib-O1
+.PHONY : sharedlib-O1
+
+# fast build rule for target.
+sharedlib-O1/fast:
+	$(MAKE) -f CMakeFiles/sharedlib-O1.dir/build.make CMakeFiles/sharedlib-O1.dir/build
+.PHONY : sharedlib-O1/fast
+
+#=============================================================================
+# Target rules for targets named main-O
+
+# Build rule for target.
+main-O: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main-O
+.PHONY : main-O
+
+# fast build rule for target.
+main-O/fast:
+	$(MAKE) -f CMakeFiles/main-O.dir/build.make CMakeFiles/main-O.dir/build
+.PHONY : main-O/fast
+
+#=============================================================================
+# Target rules for targets named dmain-O
+
+# Build rule for target.
+dmain-O: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dmain-O
+.PHONY : dmain-O
+
+# fast build rule for target.
+dmain-O/fast:
+	$(MAKE) -f CMakeFiles/dmain-O.dir/build.make CMakeFiles/dmain-O.dir/build
+.PHONY : dmain-O/fast
+
+#=============================================================================
+# Target rules for targets named staticlib-O
+
+# Build rule for target.
+staticlib-O: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 staticlib-O
+.PHONY : staticlib-O
+
+# fast build rule for target.
+staticlib-O/fast:
+	$(MAKE) -f CMakeFiles/staticlib-O.dir/build.make CMakeFiles/staticlib-O.dir/build
+.PHONY : staticlib-O/fast
+
+#=============================================================================
+# Target rules for targets named shmain
+
+# Build rule for target.
+shmain: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 shmain
+.PHONY : shmain
+
+# fast build rule for target.
+shmain/fast:
+	$(MAKE) -f CMakeFiles/shmain.dir/build.make CMakeFiles/shmain.dir/build
+.PHONY : shmain/fast
+
+#=============================================================================
+# Target rules for targets named staticlib
+
+# Build rule for target.
+staticlib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 staticlib
+.PHONY : staticlib
+
+# fast build rule for target.
+staticlib/fast:
+	$(MAKE) -f CMakeFiles/staticlib.dir/build.make CMakeFiles/staticlib.dir/build
+.PHONY : staticlib/fast
+
+#=============================================================================
+# Target rules for targets named staticlib-O1
+
+# Build rule for target.
+staticlib-O1: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 staticlib-O1
+.PHONY : staticlib-O1
+
+# fast build rule for target.
+staticlib-O1/fast:
+	$(MAKE) -f CMakeFiles/staticlib-O1.dir/build.make CMakeFiles/staticlib-O1.dir/build
+.PHONY : staticlib-O1/fast
+
+#=============================================================================
+# Target rules for targets named sharedlib-O2
+
+# Build rule for target.
+sharedlib-O2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sharedlib-O2
+.PHONY : sharedlib-O2
+
+# fast build rule for target.
+sharedlib-O2/fast:
+	$(MAKE) -f CMakeFiles/sharedlib-O2.dir/build.make CMakeFiles/sharedlib-O2.dir/build
+.PHONY : sharedlib-O2/fast
+
+#=============================================================================
+# Target rules for targets named sharedlib
+
+# Build rule for target.
+sharedlib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sharedlib
+.PHONY : sharedlib
+
+# fast build rule for target.
+sharedlib/fast:
+	$(MAKE) -f CMakeFiles/sharedlib.dir/build.make CMakeFiles/sharedlib.dir/build
+.PHONY : sharedlib/fast
+
+#=============================================================================
+# Target rules for targets named main-O3
+
+# Build rule for target.
+main-O3: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main-O3
+.PHONY : main-O3
+
+# fast build rule for target.
+main-O3/fast:
+	$(MAKE) -f CMakeFiles/main-O3.dir/build.make CMakeFiles/main-O3.dir/build
+.PHONY : main-O3/fast
+
+#=============================================================================
+# Target rules for targets named main
+
+# Build rule for target.
+main: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main
+.PHONY : main
+
+# fast build rule for target.
+main/fast:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
+.PHONY : main/fast
+
+#=============================================================================
+# Target rules for targets named staticlib-Os
+
+# Build rule for target.
+staticlib-Os: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 staticlib-Os
+.PHONY : staticlib-Os
+
+# fast build rule for target.
+staticlib-Os/fast:
+	$(MAKE) -f CMakeFiles/staticlib-Os.dir/build.make CMakeFiles/staticlib-Os.dir/build
+.PHONY : staticlib-Os/fast
+
+#=============================================================================
+# Target rules for targets named staticlib-O3
+
+# Build rule for target.
+staticlib-O3: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 staticlib-O3
+.PHONY : staticlib-O3
+
+# fast build rule for target.
+staticlib-O3/fast:
+	$(MAKE) -f CMakeFiles/staticlib-O3.dir/build.make CMakeFiles/staticlib-O3.dir/build
+.PHONY : staticlib-O3/fast
+
+#=============================================================================
+# Target rules for targets named sharedlib-O
+
+# Build rule for target.
+sharedlib-O: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sharedlib-O
+.PHONY : sharedlib-O
+
+# fast build rule for target.
+sharedlib-O/fast:
+	$(MAKE) -f CMakeFiles/sharedlib-O.dir/build.make CMakeFiles/sharedlib-O.dir/build
+.PHONY : sharedlib-O/fast
+
+#=============================================================================
+# Target rules for targets named shmain-O1
+
+# Build rule for target.
+shmain-O1: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 shmain-O1
+.PHONY : shmain-O1
+
+# fast build rule for target.
+shmain-O1/fast:
+	$(MAKE) -f CMakeFiles/shmain-O1.dir/build.make CMakeFiles/shmain-O1.dir/build
+.PHONY : shmain-O1/fast
+
+#=============================================================================
+# Target rules for targets named dynamiclib-Os
+
+# Build rule for target.
+dynamiclib-Os: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dynamiclib-Os
+.PHONY : dynamiclib-Os
+
+# fast build rule for target.
+dynamiclib-Os/fast:
+	$(MAKE) -f CMakeFiles/dynamiclib-Os.dir/build.make CMakeFiles/dynamiclib-Os.dir/build
+.PHONY : dynamiclib-Os/fast
+
+#=============================================================================
+# Target rules for targets named dmain-O1
+
+# Build rule for target.
+dmain-O1: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dmain-O1
+.PHONY : dmain-O1
+
+# fast build rule for target.
+dmain-O1/fast:
+	$(MAKE) -f CMakeFiles/dmain-O1.dir/build.make CMakeFiles/dmain-O1.dir/build
+.PHONY : dmain-O1/fast
+
+#=============================================================================
+# Target rules for targets named staticlib-O2
+
+# Build rule for target.
+staticlib-O2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 staticlib-O2
+.PHONY : staticlib-O2
+
+# fast build rule for target.
+staticlib-O2/fast:
+	$(MAKE) -f CMakeFiles/staticlib-O2.dir/build.make CMakeFiles/staticlib-O2.dir/build
+.PHONY : staticlib-O2/fast
+
+#=============================================================================
+# Target rules for targets named dmain-O2
+
+# Build rule for target.
+dmain-O2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dmain-O2
+.PHONY : dmain-O2
+
+# fast build rule for target.
+dmain-O2/fast:
+	$(MAKE) -f CMakeFiles/dmain-O2.dir/build.make CMakeFiles/dmain-O2.dir/build
+.PHONY : dmain-O2/fast
+
+#=============================================================================
+# Target rules for targets named dynamiclib-O2
+
+# Build rule for target.
+dynamiclib-O2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dynamiclib-O2
+.PHONY : dynamiclib-O2
+
+# fast build rule for target.
+dynamiclib-O2/fast:
+	$(MAKE) -f CMakeFiles/dynamiclib-O2.dir/build.make CMakeFiles/dynamiclib-O2.dir/build
+.PHONY : dynamiclib-O2/fast
+
+#=============================================================================
+# Target rules for targets named dynamiclib
+
+# Build rule for target.
+dynamiclib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dynamiclib
+.PHONY : dynamiclib
+
+# fast build rule for target.
+dynamiclib/fast:
+	$(MAKE) -f CMakeFiles/dynamiclib.dir/build.make CMakeFiles/dynamiclib.dir/build
+.PHONY : dynamiclib/fast
+
+#=============================================================================
+# Target rules for targets named main-O2
+
+# Build rule for target.
+main-O2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main-O2
+.PHONY : main-O2
+
+# fast build rule for target.
+main-O2/fast:
+	$(MAKE) -f CMakeFiles/main-O2.dir/build.make CMakeFiles/main-O2.dir/build
+.PHONY : main-O2/fast
+
+#=============================================================================
+# Target rules for targets named sharedlib-O3
+
+# Build rule for target.
+sharedlib-O3: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sharedlib-O3
+.PHONY : sharedlib-O3
+
+# fast build rule for target.
+sharedlib-O3/fast:
+	$(MAKE) -f CMakeFiles/sharedlib-O3.dir/build.make CMakeFiles/sharedlib-O3.dir/build
+.PHONY : sharedlib-O3/fast
+
+#=============================================================================
+# Target rules for targets named dynamiclib-O3
+
+# Build rule for target.
+dynamiclib-O3: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dynamiclib-O3
+.PHONY : dynamiclib-O3
+
+# fast build rule for target.
+dynamiclib-O3/fast:
+	$(MAKE) -f CMakeFiles/dynamiclib-O3.dir/build.make CMakeFiles/dynamiclib-O3.dir/build
+.PHONY : dynamiclib-O3/fast
+
+#=============================================================================
+# Target rules for targets named dynamiclib-O
+
+# Build rule for target.
+dynamiclib-O: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dynamiclib-O
+.PHONY : dynamiclib-O
+
+# fast build rule for target.
+dynamiclib-O/fast:
+	$(MAKE) -f CMakeFiles/dynamiclib-O.dir/build.make CMakeFiles/dynamiclib-O.dir/build
+.PHONY : dynamiclib-O/fast
+
+#=============================================================================
+# Target rules for targets named shmain-O3
+
+# Build rule for target.
+shmain-O3: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 shmain-O3
+.PHONY : shmain-O3
+
+# fast build rule for target.
+shmain-O3/fast:
+	$(MAKE) -f CMakeFiles/shmain-O3.dir/build.make CMakeFiles/shmain-O3.dir/build
+.PHONY : shmain-O3/fast
+
+#=============================================================================
+# Target rules for targets named dmain-O3
+
+# Build rule for target.
+dmain-O3: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dmain-O3
+.PHONY : dmain-O3
+
+# fast build rule for target.
+dmain-O3/fast:
+	$(MAKE) -f CMakeFiles/dmain-O3.dir/build.make CMakeFiles/dmain-O3.dir/build
+.PHONY : dmain-O3/fast
+
+#=============================================================================
+# Target rules for targets named sharedlib-Os
+
+# Build rule for target.
+sharedlib-Os: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sharedlib-Os
+.PHONY : sharedlib-Os
+
+# fast build rule for target.
+sharedlib-Os/fast:
+	$(MAKE) -f CMakeFiles/sharedlib-Os.dir/build.make CMakeFiles/sharedlib-Os.dir/build
+.PHONY : sharedlib-Os/fast
+
+#=============================================================================
+# Target rules for targets named shmain-O2
+
+# Build rule for target.
+shmain-O2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 shmain-O2
+.PHONY : shmain-O2
+
+# fast build rule for target.
+shmain-O2/fast:
+	$(MAKE) -f CMakeFiles/shmain-O2.dir/build.make CMakeFiles/shmain-O2.dir/build
+.PHONY : shmain-O2/fast
+
+#=============================================================================
+# Target rules for targets named main-Os
+
+# Build rule for target.
+main-Os: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main-Os
+.PHONY : main-Os
+
+# fast build rule for target.
+main-Os/fast:
+	$(MAKE) -f CMakeFiles/main-Os.dir/build.make CMakeFiles/main-Os.dir/build
+.PHONY : main-Os/fast
+
+#=============================================================================
+# Target rules for targets named shmain-Os
+
+# Build rule for target.
+shmain-Os: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 shmain-Os
+.PHONY : shmain-Os
+
+# fast build rule for target.
+shmain-Os/fast:
+	$(MAKE) -f CMakeFiles/shmain-Os.dir/build.make CMakeFiles/shmain-Os.dir/build
+.PHONY : shmain-Os/fast
+
+#=============================================================================
+# Target rules for targets named shmain-O
+
+# Build rule for target.
+shmain-O: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 shmain-O
+.PHONY : shmain-O
+
+# fast build rule for target.
+shmain-O/fast:
+	$(MAKE) -f CMakeFiles/shmain-O.dir/build.make CMakeFiles/shmain-O.dir/build
+.PHONY : shmain-O/fast
+
+#=============================================================================
+# Target rules for targets named dmain-Os
+
+# Build rule for target.
+dmain-Os: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dmain-Os
+.PHONY : dmain-Os
+
+# fast build rule for target.
+dmain-Os/fast:
+	$(MAKE) -f CMakeFiles/dmain-Os.dir/build.make CMakeFiles/dmain-Os.dir/build
+.PHONY : dmain-Os/fast
+
+dyn_main.o: dyn_main.c.o
+
+.PHONY : dyn_main.o
+
+# target to build an object file
+dyn_main.c.o:
+	$(MAKE) -f CMakeFiles/dmain.dir/build.make CMakeFiles/dmain.dir/dyn_main.c.o
+	$(MAKE) -f CMakeFiles/dmain-O.dir/build.make CMakeFiles/dmain-O.dir/dyn_main.c.o
+	$(MAKE) -f CMakeFiles/dmain-O1.dir/build.make CMakeFiles/dmain-O1.dir/dyn_main.c.o
+	$(MAKE) -f CMakeFiles/dmain-O2.dir/build.make CMakeFiles/dmain-O2.dir/dyn_main.c.o
+	$(MAKE) -f CMakeFiles/dmain-O3.dir/build.make CMakeFiles/dmain-O3.dir/dyn_main.c.o
+	$(MAKE) -f CMakeFiles/dmain-Os.dir/build.make CMakeFiles/dmain-Os.dir/dyn_main.c.o
+.PHONY : dyn_main.c.o
+
+dyn_main.i: dyn_main.c.i
+
+.PHONY : dyn_main.i
+
+# target to preprocess a source file
+dyn_main.c.i:
+	$(MAKE) -f CMakeFiles/dmain.dir/build.make CMakeFiles/dmain.dir/dyn_main.c.i
+	$(MAKE) -f CMakeFiles/dmain-O.dir/build.make CMakeFiles/dmain-O.dir/dyn_main.c.i
+	$(MAKE) -f CMakeFiles/dmain-O1.dir/build.make CMakeFiles/dmain-O1.dir/dyn_main.c.i
+	$(MAKE) -f CMakeFiles/dmain-O2.dir/build.make CMakeFiles/dmain-O2.dir/dyn_main.c.i
+	$(MAKE) -f CMakeFiles/dmain-O3.dir/build.make CMakeFiles/dmain-O3.dir/dyn_main.c.i
+	$(MAKE) -f CMakeFiles/dmain-Os.dir/build.make CMakeFiles/dmain-Os.dir/dyn_main.c.i
+.PHONY : dyn_main.c.i
+
+dyn_main.s: dyn_main.c.s
+
+.PHONY : dyn_main.s
+
+# target to generate assembly for a file
+dyn_main.c.s:
+	$(MAKE) -f CMakeFiles/dmain.dir/build.make CMakeFiles/dmain.dir/dyn_main.c.s
+	$(MAKE) -f CMakeFiles/dmain-O.dir/build.make CMakeFiles/dmain-O.dir/dyn_main.c.s
+	$(MAKE) -f CMakeFiles/dmain-O1.dir/build.make CMakeFiles/dmain-O1.dir/dyn_main.c.s
+	$(MAKE) -f CMakeFiles/dmain-O2.dir/build.make CMakeFiles/dmain-O2.dir/dyn_main.c.s
+	$(MAKE) -f CMakeFiles/dmain-O3.dir/build.make CMakeFiles/dmain-O3.dir/dyn_main.c.s
+	$(MAKE) -f CMakeFiles/dmain-Os.dir/build.make CMakeFiles/dmain-Os.dir/dyn_main.c.s
+.PHONY : dyn_main.c.s
 
 library.o: library.c.o
 
@@ -129,7 +637,24 @@ library.o: library.c.o
 
 # target to build an object file
 library.c.o:
-	$(MAKE) -f CMakeFiles/lab1.dir/build.make CMakeFiles/lab1.dir/library.c.o
+	$(MAKE) -f CMakeFiles/dynamiclib-O1.dir/build.make CMakeFiles/dynamiclib-O1.dir/library.c.o
+	$(MAKE) -f CMakeFiles/sharedlib-O1.dir/build.make CMakeFiles/sharedlib-O1.dir/library.c.o
+	$(MAKE) -f CMakeFiles/staticlib-O.dir/build.make CMakeFiles/staticlib-O.dir/library.c.o
+	$(MAKE) -f CMakeFiles/staticlib.dir/build.make CMakeFiles/staticlib.dir/library.c.o
+	$(MAKE) -f CMakeFiles/staticlib-O1.dir/build.make CMakeFiles/staticlib-O1.dir/library.c.o
+	$(MAKE) -f CMakeFiles/sharedlib-O2.dir/build.make CMakeFiles/sharedlib-O2.dir/library.c.o
+	$(MAKE) -f CMakeFiles/sharedlib.dir/build.make CMakeFiles/sharedlib.dir/library.c.o
+	$(MAKE) -f CMakeFiles/staticlib-Os.dir/build.make CMakeFiles/staticlib-Os.dir/library.c.o
+	$(MAKE) -f CMakeFiles/staticlib-O3.dir/build.make CMakeFiles/staticlib-O3.dir/library.c.o
+	$(MAKE) -f CMakeFiles/sharedlib-O.dir/build.make CMakeFiles/sharedlib-O.dir/library.c.o
+	$(MAKE) -f CMakeFiles/dynamiclib-Os.dir/build.make CMakeFiles/dynamiclib-Os.dir/library.c.o
+	$(MAKE) -f CMakeFiles/staticlib-O2.dir/build.make CMakeFiles/staticlib-O2.dir/library.c.o
+	$(MAKE) -f CMakeFiles/dynamiclib-O2.dir/build.make CMakeFiles/dynamiclib-O2.dir/library.c.o
+	$(MAKE) -f CMakeFiles/dynamiclib.dir/build.make CMakeFiles/dynamiclib.dir/library.c.o
+	$(MAKE) -f CMakeFiles/sharedlib-O3.dir/build.make CMakeFiles/sharedlib-O3.dir/library.c.o
+	$(MAKE) -f CMakeFiles/dynamiclib-O3.dir/build.make CMakeFiles/dynamiclib-O3.dir/library.c.o
+	$(MAKE) -f CMakeFiles/dynamiclib-O.dir/build.make CMakeFiles/dynamiclib-O.dir/library.c.o
+	$(MAKE) -f CMakeFiles/sharedlib-Os.dir/build.make CMakeFiles/sharedlib-Os.dir/library.c.o
 .PHONY : library.c.o
 
 library.i: library.c.i
@@ -138,7 +663,24 @@ library.i: library.c.i
 
 # target to preprocess a source file
 library.c.i:
-	$(MAKE) -f CMakeFiles/lab1.dir/build.make CMakeFiles/lab1.dir/library.c.i
+	$(MAKE) -f CMakeFiles/dynamiclib-O1.dir/build.make CMakeFiles/dynamiclib-O1.dir/library.c.i
+	$(MAKE) -f CMakeFiles/sharedlib-O1.dir/build.make CMakeFiles/sharedlib-O1.dir/library.c.i
+	$(MAKE) -f CMakeFiles/staticlib-O.dir/build.make CMakeFiles/staticlib-O.dir/library.c.i
+	$(MAKE) -f CMakeFiles/staticlib.dir/build.make CMakeFiles/staticlib.dir/library.c.i
+	$(MAKE) -f CMakeFiles/staticlib-O1.dir/build.make CMakeFiles/staticlib-O1.dir/library.c.i
+	$(MAKE) -f CMakeFiles/sharedlib-O2.dir/build.make CMakeFiles/sharedlib-O2.dir/library.c.i
+	$(MAKE) -f CMakeFiles/sharedlib.dir/build.make CMakeFiles/sharedlib.dir/library.c.i
+	$(MAKE) -f CMakeFiles/staticlib-Os.dir/build.make CMakeFiles/staticlib-Os.dir/library.c.i
+	$(MAKE) -f CMakeFiles/staticlib-O3.dir/build.make CMakeFiles/staticlib-O3.dir/library.c.i
+	$(MAKE) -f CMakeFiles/sharedlib-O.dir/build.make CMakeFiles/sharedlib-O.dir/library.c.i
+	$(MAKE) -f CMakeFiles/dynamiclib-Os.dir/build.make CMakeFiles/dynamiclib-Os.dir/library.c.i
+	$(MAKE) -f CMakeFiles/staticlib-O2.dir/build.make CMakeFiles/staticlib-O2.dir/library.c.i
+	$(MAKE) -f CMakeFiles/dynamiclib-O2.dir/build.make CMakeFiles/dynamiclib-O2.dir/library.c.i
+	$(MAKE) -f CMakeFiles/dynamiclib.dir/build.make CMakeFiles/dynamiclib.dir/library.c.i
+	$(MAKE) -f CMakeFiles/sharedlib-O3.dir/build.make CMakeFiles/sharedlib-O3.dir/library.c.i
+	$(MAKE) -f CMakeFiles/dynamiclib-O3.dir/build.make CMakeFiles/dynamiclib-O3.dir/library.c.i
+	$(MAKE) -f CMakeFiles/dynamiclib-O.dir/build.make CMakeFiles/dynamiclib-O.dir/library.c.i
+	$(MAKE) -f CMakeFiles/sharedlib-Os.dir/build.make CMakeFiles/sharedlib-Os.dir/library.c.i
 .PHONY : library.c.i
 
 library.s: library.c.s
@@ -147,62 +689,85 @@ library.s: library.c.s
 
 # target to generate assembly for a file
 library.c.s:
-	$(MAKE) -f CMakeFiles/lab1.dir/build.make CMakeFiles/lab1.dir/library.c.s
+	$(MAKE) -f CMakeFiles/dynamiclib-O1.dir/build.make CMakeFiles/dynamiclib-O1.dir/library.c.s
+	$(MAKE) -f CMakeFiles/sharedlib-O1.dir/build.make CMakeFiles/sharedlib-O1.dir/library.c.s
+	$(MAKE) -f CMakeFiles/staticlib-O.dir/build.make CMakeFiles/staticlib-O.dir/library.c.s
+	$(MAKE) -f CMakeFiles/staticlib.dir/build.make CMakeFiles/staticlib.dir/library.c.s
+	$(MAKE) -f CMakeFiles/staticlib-O1.dir/build.make CMakeFiles/staticlib-O1.dir/library.c.s
+	$(MAKE) -f CMakeFiles/sharedlib-O2.dir/build.make CMakeFiles/sharedlib-O2.dir/library.c.s
+	$(MAKE) -f CMakeFiles/sharedlib.dir/build.make CMakeFiles/sharedlib.dir/library.c.s
+	$(MAKE) -f CMakeFiles/staticlib-Os.dir/build.make CMakeFiles/staticlib-Os.dir/library.c.s
+	$(MAKE) -f CMakeFiles/staticlib-O3.dir/build.make CMakeFiles/staticlib-O3.dir/library.c.s
+	$(MAKE) -f CMakeFiles/sharedlib-O.dir/build.make CMakeFiles/sharedlib-O.dir/library.c.s
+	$(MAKE) -f CMakeFiles/dynamiclib-Os.dir/build.make CMakeFiles/dynamiclib-Os.dir/library.c.s
+	$(MAKE) -f CMakeFiles/staticlib-O2.dir/build.make CMakeFiles/staticlib-O2.dir/library.c.s
+	$(MAKE) -f CMakeFiles/dynamiclib-O2.dir/build.make CMakeFiles/dynamiclib-O2.dir/library.c.s
+	$(MAKE) -f CMakeFiles/dynamiclib.dir/build.make CMakeFiles/dynamiclib.dir/library.c.s
+	$(MAKE) -f CMakeFiles/sharedlib-O3.dir/build.make CMakeFiles/sharedlib-O3.dir/library.c.s
+	$(MAKE) -f CMakeFiles/dynamiclib-O3.dir/build.make CMakeFiles/dynamiclib-O3.dir/library.c.s
+	$(MAKE) -f CMakeFiles/dynamiclib-O.dir/build.make CMakeFiles/dynamiclib-O.dir/library.c.s
+	$(MAKE) -f CMakeFiles/sharedlib-Os.dir/build.make CMakeFiles/sharedlib-Os.dir/library.c.s
 .PHONY : library.c.s
 
-test.o: test.c.o
+main.o: main.c.o
 
-.PHONY : test.o
-
-# target to build an object file
-test.c.o:
-	$(MAKE) -f CMakeFiles/lab1.dir/build.make CMakeFiles/lab1.dir/test.c.o
-.PHONY : test.c.o
-
-test.i: test.c.i
-
-.PHONY : test.i
-
-# target to preprocess a source file
-test.c.i:
-	$(MAKE) -f CMakeFiles/lab1.dir/build.make CMakeFiles/lab1.dir/test.c.i
-.PHONY : test.c.i
-
-test.s: test.c.s
-
-.PHONY : test.s
-
-# target to generate assembly for a file
-test.c.s:
-	$(MAKE) -f CMakeFiles/lab1.dir/build.make CMakeFiles/lab1.dir/test.c.s
-.PHONY : test.c.s
-
-xd.o: xd.c.o
-
-.PHONY : xd.o
+.PHONY : main.o
 
 # target to build an object file
-xd.c.o:
-	$(MAKE) -f CMakeFiles/lab1.dir/build.make CMakeFiles/lab1.dir/xd.c.o
-.PHONY : xd.c.o
+main.c.o:
+	$(MAKE) -f CMakeFiles/main-O1.dir/build.make CMakeFiles/main-O1.dir/main.c.o
+	$(MAKE) -f CMakeFiles/main-O.dir/build.make CMakeFiles/main-O.dir/main.c.o
+	$(MAKE) -f CMakeFiles/shmain.dir/build.make CMakeFiles/shmain.dir/main.c.o
+	$(MAKE) -f CMakeFiles/main-O3.dir/build.make CMakeFiles/main-O3.dir/main.c.o
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.c.o
+	$(MAKE) -f CMakeFiles/shmain-O1.dir/build.make CMakeFiles/shmain-O1.dir/main.c.o
+	$(MAKE) -f CMakeFiles/main-O2.dir/build.make CMakeFiles/main-O2.dir/main.c.o
+	$(MAKE) -f CMakeFiles/shmain-O3.dir/build.make CMakeFiles/shmain-O3.dir/main.c.o
+	$(MAKE) -f CMakeFiles/shmain-O2.dir/build.make CMakeFiles/shmain-O2.dir/main.c.o
+	$(MAKE) -f CMakeFiles/main-Os.dir/build.make CMakeFiles/main-Os.dir/main.c.o
+	$(MAKE) -f CMakeFiles/shmain-Os.dir/build.make CMakeFiles/shmain-Os.dir/main.c.o
+	$(MAKE) -f CMakeFiles/shmain-O.dir/build.make CMakeFiles/shmain-O.dir/main.c.o
+.PHONY : main.c.o
 
-xd.i: xd.c.i
+main.i: main.c.i
 
-.PHONY : xd.i
+.PHONY : main.i
 
 # target to preprocess a source file
-xd.c.i:
-	$(MAKE) -f CMakeFiles/lab1.dir/build.make CMakeFiles/lab1.dir/xd.c.i
-.PHONY : xd.c.i
+main.c.i:
+	$(MAKE) -f CMakeFiles/main-O1.dir/build.make CMakeFiles/main-O1.dir/main.c.i
+	$(MAKE) -f CMakeFiles/main-O.dir/build.make CMakeFiles/main-O.dir/main.c.i
+	$(MAKE) -f CMakeFiles/shmain.dir/build.make CMakeFiles/shmain.dir/main.c.i
+	$(MAKE) -f CMakeFiles/main-O3.dir/build.make CMakeFiles/main-O3.dir/main.c.i
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.c.i
+	$(MAKE) -f CMakeFiles/shmain-O1.dir/build.make CMakeFiles/shmain-O1.dir/main.c.i
+	$(MAKE) -f CMakeFiles/main-O2.dir/build.make CMakeFiles/main-O2.dir/main.c.i
+	$(MAKE) -f CMakeFiles/shmain-O3.dir/build.make CMakeFiles/shmain-O3.dir/main.c.i
+	$(MAKE) -f CMakeFiles/shmain-O2.dir/build.make CMakeFiles/shmain-O2.dir/main.c.i
+	$(MAKE) -f CMakeFiles/main-Os.dir/build.make CMakeFiles/main-Os.dir/main.c.i
+	$(MAKE) -f CMakeFiles/shmain-Os.dir/build.make CMakeFiles/shmain-Os.dir/main.c.i
+	$(MAKE) -f CMakeFiles/shmain-O.dir/build.make CMakeFiles/shmain-O.dir/main.c.i
+.PHONY : main.c.i
 
-xd.s: xd.c.s
+main.s: main.c.s
 
-.PHONY : xd.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-xd.c.s:
-	$(MAKE) -f CMakeFiles/lab1.dir/build.make CMakeFiles/lab1.dir/xd.c.s
-.PHONY : xd.c.s
+main.c.s:
+	$(MAKE) -f CMakeFiles/main-O1.dir/build.make CMakeFiles/main-O1.dir/main.c.s
+	$(MAKE) -f CMakeFiles/main-O.dir/build.make CMakeFiles/main-O.dir/main.c.s
+	$(MAKE) -f CMakeFiles/shmain.dir/build.make CMakeFiles/shmain.dir/main.c.s
+	$(MAKE) -f CMakeFiles/main-O3.dir/build.make CMakeFiles/main-O3.dir/main.c.s
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.c.s
+	$(MAKE) -f CMakeFiles/shmain-O1.dir/build.make CMakeFiles/shmain-O1.dir/main.c.s
+	$(MAKE) -f CMakeFiles/main-O2.dir/build.make CMakeFiles/main-O2.dir/main.c.s
+	$(MAKE) -f CMakeFiles/shmain-O3.dir/build.make CMakeFiles/shmain-O3.dir/main.c.s
+	$(MAKE) -f CMakeFiles/shmain-O2.dir/build.make CMakeFiles/shmain-O2.dir/main.c.s
+	$(MAKE) -f CMakeFiles/main-Os.dir/build.make CMakeFiles/main-Os.dir/main.c.s
+	$(MAKE) -f CMakeFiles/shmain-Os.dir/build.make CMakeFiles/shmain-Os.dir/main.c.s
+	$(MAKE) -f CMakeFiles/shmain-O.dir/build.make CMakeFiles/shmain-O.dir/main.c.s
+.PHONY : main.c.s
 
 # Help Target
 help:
@@ -210,18 +775,54 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... lab1"
+	@echo "... test"
+	@echo "... main-O1"
+	@echo "... dynamiclib-O1"
+	@echo "... dmain"
+	@echo "... rebuild_cache"
+	@echo "... sharedlib-O1"
+	@echo "... main-O"
+	@echo "... dmain-O"
+	@echo "... staticlib-O"
+	@echo "... shmain"
+	@echo "... staticlib"
+	@echo "... staticlib-O1"
+	@echo "... sharedlib-O2"
+	@echo "... sharedlib"
+	@echo "... main-O3"
+	@echo "... main"
+	@echo "... staticlib-Os"
+	@echo "... staticlib-O3"
+	@echo "... sharedlib-O"
+	@echo "... shmain-O1"
+	@echo "... dynamiclib-Os"
+	@echo "... dmain-O1"
+	@echo "... staticlib-O2"
+	@echo "... dmain-O2"
+	@echo "... dynamiclib-O2"
+	@echo "... dynamiclib"
+	@echo "... main-O2"
+	@echo "... sharedlib-O3"
+	@echo "... dynamiclib-O3"
+	@echo "... dynamiclib-O"
+	@echo "... shmain-O3"
+	@echo "... dmain-O3"
+	@echo "... sharedlib-Os"
+	@echo "... shmain-O2"
+	@echo "... main-Os"
+	@echo "... shmain-Os"
+	@echo "... shmain-O"
+	@echo "... dmain-Os"
+	@echo "... dyn_main.o"
+	@echo "... dyn_main.i"
+	@echo "... dyn_main.s"
 	@echo "... library.o"
 	@echo "... library.i"
 	@echo "... library.s"
-	@echo "... test.o"
-	@echo "... test.i"
-	@echo "... test.s"
-	@echo "... xd.o"
-	@echo "... xd.i"
-	@echo "... xd.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 

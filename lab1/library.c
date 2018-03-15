@@ -16,14 +16,16 @@ struct array_struct *create_struct(int blocks, int block_size, int is_static){
     arr_struct -> blocks = blocks;
     arr_struct -> block_size = block_size;
     arr_struct -> is_static = is_static;
-
     if(is_static)
         arr_struct -> array = (char **) static_array;
     else{
         char **array = malloc(blocks * sizeof(char *));
         arr_struct -> array = array;
     }
+
+    return arr_struct;
 }
+
 void delete_array(struct array_struct *arr_struct){
     for (int i = 0 ; i < arr_struct -> blocks ; i++){
         delete_block(arr_struct, i);
@@ -32,6 +34,7 @@ void delete_array(struct array_struct *arr_struct){
     if(!arr_struct->is_static) free(arr_struct->array);
     free(arr_struct);
 }
+
 void delete_block(struct array_struct *arr_struct, int index){
     if (index < 0 || index >= arr_struct -> blocks) return;
     if (arr_struct -> array[index] == NULL) return;
@@ -39,9 +42,12 @@ void delete_block(struct array_struct *arr_struct, int index){
         arr_struct->array[index] = "";
         return;
     }
-
-    free(arr_struct->array[index]);
+    else {
+        free(arr_struct->array[index]);
+    }
+    return;
 }
+
 void add_block(struct array_struct *arr_struct, int index, char *block){
     if (index < 0 || index > arr_struct -> blocks) return;
     if (arr_struct -> array[index] != NULL) return;
@@ -51,6 +57,7 @@ void add_block(struct array_struct *arr_struct, int index, char *block){
     else
         arr_struct -> array[index] = strcpy((malloc(arr_struct -> block_size * sizeof(char))), block);
 }
+
 int calculate_block(char *block){
     int tmp = 0;
     for (int i = 0 ; i < strlen(block) ; i++){
@@ -58,7 +65,8 @@ int calculate_block(char *block){
     }
     return tmp;
 }
-char *findBlock(struct array_struct *arr_struct, int index) {
+
+char *find_block(struct array_struct *arr_struct, int index) {
     if (index < 0 || index >= arr_struct -> blocks) return NULL;
     if (arr_struct -> array[index] == NULL) return NULL;
 

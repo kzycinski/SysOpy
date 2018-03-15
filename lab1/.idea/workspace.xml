@@ -2,7 +2,42 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
-      <config projectName="lab1" targetName="lab1" />
+      <config projectName="lab12" targetName="dmain-O3" />
+      <config projectName="lab12" targetName="dmain-O2" />
+      <config projectName="lab12" targetName="dmain-O1" />
+      <config projectName="lab12" targetName="shmain-O2" />
+      <config projectName="lab12" targetName="shmain-O1" />
+      <config projectName="lab12" targetName="shmain" />
+      <config projectName="lab12" targetName="dmain-O" />
+      <config projectName="lab12" targetName="dmain-Os" />
+      <config projectName="lab12" targetName="staticlib-O" />
+      <config projectName="lab12" targetName="dynamiclib" />
+      <config projectName="lab12" targetName="dynamiclib-O3" />
+      <config projectName="lab12" targetName="dynamiclib-O2" />
+      <config projectName="lab12" targetName="dynamiclib-O1" />
+      <config projectName="lab12" targetName="sharedlib-O3" />
+      <config projectName="lab12" targetName="sharedlib-O2" />
+      <config projectName="lab12" targetName="sharedlib-O1" />
+      <config projectName="lab12" targetName="main" />
+      <config projectName="lab12" targetName="dynamiclib-O" />
+      <config projectName="lab12" targetName="shmain-Os" />
+      <config projectName="lab12" targetName="dmain" />
+      <config projectName="lab12" targetName="staticlib" />
+      <config projectName="lab12" targetName="sharedlib-O" />
+      <config projectName="lab12" targetName="sharedlib-Os" />
+      <config projectName="lab12" targetName="sharedlib" />
+      <config projectName="lab12" targetName="shmain-O3" />
+      <config projectName="lab12" targetName="shmain-O" />
+      <config projectName="lab12" targetName="dynamiclib-Os" />
+      <config projectName="lab12" targetName="staticlib-O3" />
+      <config projectName="lab12" targetName="staticlib-O2" />
+      <config projectName="lab12" targetName="staticlib-O1" />
+      <config projectName="lab12" targetName="main-O3" />
+      <config projectName="lab12" targetName="main-O2" />
+      <config projectName="lab12" targetName="main-O1" />
+      <config projectName="lab12" targetName="staticlib-Os" />
+      <config projectName="lab12" targetName="main-O" />
+      <config projectName="lab12" targetName="main-Os" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -24,11 +59,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-10">
-              <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+            <state relative-caret-position="483">
+              <caret line="70" column="47" lean-forward="false" selection-start-line="70" selection-start-column="47" selection-end-line="70" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -37,8 +72,8 @@
       <file leaf-file-name="library.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/library.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="13" column="63" lean-forward="false" selection-start-line="13" selection-start-column="63" selection-end-line="13" selection-end-column="63" />
+            <state relative-caret-position="180">
+              <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -47,22 +82,32 @@
       <file leaf-file-name="library.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/library.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1062">
-              <caret line="59" column="1" lean-forward="false" selection-start-line="59" selection-start-column="1" selection-end-line="59" selection-end-column="1" />
+            <state relative-caret-position="717">
+              <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.c" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1731">
+              <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
               <folding>
-                <element signature="e#0#20#0" expanded="true" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.c" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/zad2/test.c">
+      <file leaf-file-name="dyn_main.c" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dyn_main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="382">
-              <caret line="186" column="6" lean-forward="false" selection-start-line="186" selection-start-column="6" selection-end-line="186" selection-end-column="6" />
+            <state relative-caret-position="-1839">
+              <caret line="91" column="0" lean-forward="false" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
               <folding>
-                <element signature="e#57#77#0" expanded="true" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -70,19 +115,27 @@
       </file>
     </leaf>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>FILE</find>
+      <find>dynamic_</find>
+      <find>print</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/xd.c" />
+        <option value="$PROJECT_DIR$/zad2/test.c" />
+        <option value="$PROJECT_DIR$/library.h" />
+        <option value="$PROJECT_DIR$/test.c" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/main.c" />
         <option value="$PROJECT_DIR$/library.c" />
-        <option value="$PROJECT_DIR$/xd.c" />
-        <option value="$PROJECT_DIR$/test.c" />
-        <option value="$PROJECT_DIR$/library.h" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/zad2/test.c" />
+        <option value="$PROJECT_DIR$/dyn_main.c" />
       </list>
     </option>
   </component>
@@ -272,13 +325,8 @@
         <subPane>
           <expand>
             <path>
-              <item name="lab1" type="dad4c3:CidrFilesViewHelper$MyProjectTreeStructure$1" />
+              <item name="lab12" type="dad4c3:CidrFilesViewHelper$MyProjectTreeStructure$1" />
               <item name="lab1" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lab1" type="dad4c3:CidrFilesViewHelper$MyProjectTreeStructure$1" />
-              <item name="lab1" type="462c0819:PsiDirectoryNode" />
-              <item name="zad2" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -303,16 +351,156 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.lab1">
-    <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" EXPLICIT_BUILD_TARGET_NAME="all">
+  <component name="RunManager" selected="Application.dmain">
+    <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="mainShared" EXPLICIT_BUILD_TARGET_NAME="all">
       <envs />
     </configuration>
-    <configuration name="lab1" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab1" TARGET_NAME="lab1" CONFIG_NAME="Debug">
+    <configuration name="dmain-O" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dmain-O" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="dmain-O">
       <envs />
     </configuration>
-    <list size="2">
+    <configuration name="dmain-O1" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dmain-O1" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="dmain-O1">
+      <envs />
+    </configuration>
+    <configuration name="dmain-O2" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dmain-O2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="dmain-O2">
+      <envs />
+    </configuration>
+    <configuration name="dmain-O3" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dmain-O3" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="dmain-O3">
+      <envs />
+    </configuration>
+    <configuration name="dmain-Os" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dmain-Os" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="dmain-Os">
+      <envs />
+    </configuration>
+    <configuration name="dmain" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dmain" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="dmain">
+      <envs />
+    </configuration>
+    <configuration name="dynamiclib-O" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dynamiclib-O" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="dynamiclib-O1" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dynamiclib-O1" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="dynamiclib-O2" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dynamiclib-O2" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="dynamiclib-O3" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dynamiclib-O3" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="dynamiclib-Os" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dynamiclib-Os" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="dynamiclib" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="dynamiclib" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="main-O" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="main-O" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="main-O">
+      <envs />
+    </configuration>
+    <configuration name="main-O1" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="main-O1" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="main-O1">
+      <envs />
+    </configuration>
+    <configuration name="main-O2" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="main-O2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="main-O2">
+      <envs />
+    </configuration>
+    <configuration name="main-O3" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="main-O3" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="main-O3">
+      <envs />
+    </configuration>
+    <configuration name="main-Os" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="main-Os" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="main-Os">
+      <envs />
+    </configuration>
+    <configuration name="main" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="main" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="main">
+      <envs />
+    </configuration>
+    <configuration name="sharedlib-O" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="sharedlib-O" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="sharedlib-O1" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="sharedlib-O1" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="sharedlib-O2" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="sharedlib-O2" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="sharedlib-O3" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="sharedlib-O3" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="sharedlib-Os" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="sharedlib-Os" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="sharedlib" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="sharedlib" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="shmain-O" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="shmain-O" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="shmain-O">
+      <envs />
+    </configuration>
+    <configuration name="shmain-O1" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="shmain-O1" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="shmain-O1">
+      <envs />
+    </configuration>
+    <configuration name="shmain-O2" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="shmain-O2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="shmain-O2">
+      <envs />
+    </configuration>
+    <configuration name="shmain-O3" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="shmain-O3" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="shmain-O3">
+      <envs />
+    </configuration>
+    <configuration name="shmain-Os" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="shmain-Os" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="shmain-Os">
+      <envs />
+    </configuration>
+    <configuration name="shmain" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="shmain" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lab12" RUN_TARGET_NAME="shmain">
+      <envs />
+    </configuration>
+    <configuration name="staticlib-O" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="staticlib-O" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="staticlib-O1" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="staticlib-O1" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="staticlib-O2" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="staticlib-O2" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="staticlib-O3" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="staticlib-O3" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="staticlib-Os" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="staticlib-Os" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="staticlib" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lab12" TARGET_NAME="staticlib" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <list size="37">
       <item index="0" class="java.lang.String" itemvalue="Application.Build All" />
-      <item index="1" class="java.lang.String" itemvalue="Application.lab1" />
+      <item index="1" class="java.lang.String" itemvalue="Application.dmain" />
+      <item index="2" class="java.lang.String" itemvalue="Application.dmain-O" />
+      <item index="3" class="java.lang.String" itemvalue="Application.dmain-O1" />
+      <item index="4" class="java.lang.String" itemvalue="Application.dmain-O2" />
+      <item index="5" class="java.lang.String" itemvalue="Application.dmain-O3" />
+      <item index="6" class="java.lang.String" itemvalue="Application.dmain-Os" />
+      <item index="7" class="java.lang.String" itemvalue="Application.dynamiclib" />
+      <item index="8" class="java.lang.String" itemvalue="Application.dynamiclib-O" />
+      <item index="9" class="java.lang.String" itemvalue="Application.dynamiclib-O1" />
+      <item index="10" class="java.lang.String" itemvalue="Application.dynamiclib-O2" />
+      <item index="11" class="java.lang.String" itemvalue="Application.dynamiclib-O3" />
+      <item index="12" class="java.lang.String" itemvalue="Application.dynamiclib-Os" />
+      <item index="13" class="java.lang.String" itemvalue="Application.main" />
+      <item index="14" class="java.lang.String" itemvalue="Application.main-O" />
+      <item index="15" class="java.lang.String" itemvalue="Application.main-O1" />
+      <item index="16" class="java.lang.String" itemvalue="Application.main-O2" />
+      <item index="17" class="java.lang.String" itemvalue="Application.main-O3" />
+      <item index="18" class="java.lang.String" itemvalue="Application.main-Os" />
+      <item index="19" class="java.lang.String" itemvalue="Application.sharedlib" />
+      <item index="20" class="java.lang.String" itemvalue="Application.sharedlib-O" />
+      <item index="21" class="java.lang.String" itemvalue="Application.sharedlib-O1" />
+      <item index="22" class="java.lang.String" itemvalue="Application.sharedlib-O2" />
+      <item index="23" class="java.lang.String" itemvalue="Application.sharedlib-O3" />
+      <item index="24" class="java.lang.String" itemvalue="Application.sharedlib-Os" />
+      <item index="25" class="java.lang.String" itemvalue="Application.shmain" />
+      <item index="26" class="java.lang.String" itemvalue="Application.shmain-O" />
+      <item index="27" class="java.lang.String" itemvalue="Application.shmain-O1" />
+      <item index="28" class="java.lang.String" itemvalue="Application.shmain-O2" />
+      <item index="29" class="java.lang.String" itemvalue="Application.shmain-O3" />
+      <item index="30" class="java.lang.String" itemvalue="Application.shmain-Os" />
+      <item index="31" class="java.lang.String" itemvalue="Application.staticlib" />
+      <item index="32" class="java.lang.String" itemvalue="Application.staticlib-O" />
+      <item index="33" class="java.lang.String" itemvalue="Application.staticlib-O1" />
+      <item index="34" class="java.lang.String" itemvalue="Application.staticlib-O2" />
+      <item index="35" class="java.lang.String" itemvalue="Application.staticlib-O3" />
+      <item index="36" class="java.lang.String" itemvalue="Application.staticlib-Os" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
@@ -338,12 +526,20 @@
       <workItem from="1520864731182" duration="3813000" />
       <workItem from="1520868629483" duration="13285000" />
       <workItem from="1520930846434" duration="3753000" />
-      <workItem from="1520967272086" duration="7719000" />
+      <workItem from="1520967272086" duration="8014000" />
+      <workItem from="1521022675186" duration="4255000" />
+      <workItem from="1521043313973" duration="8965000" />
+      <workItem from="1521126383973" duration="4510000" />
+      <workItem from="1521133165118" duration="4987000" />
+      <workItem from="1521140331279" duration="3748000" />
+      <workItem from="1521144370343" duration="1003000" />
+      <workItem from="1521145567122" duration="11000" />
+      <workItem from="1521150597450" duration="174000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44572000" />
+    <option name="totallyTimeSpent" value="77311000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
@@ -377,11 +573,46 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/library.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="13" column="63" lean-forward="false" selection-start-line="13" selection-start-column="63" selection-end-line="13" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zad2/test.c" />
+    <entry file="file://$PROJECT_DIR$/main.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="24" column="13" lean-forward="false" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="13" column="63" lean-forward="false" selection-start-line="13" selection-start-column="63" selection-end-line="13" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -402,32 +633,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1062">
           <caret line="59" column="1" lean-forward="false" selection-start-line="59" selection-start-column="1" selection-end-line="59" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zad2/test.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2376">
-          <caret line="132" column="43" lean-forward="true" selection-start-line="132" selection-start-column="43" selection-end-line="132" selection-end-column="43" />
-          <folding>
-            <element signature="e#57#77#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xd.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding>
-            <element signature="e#43#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/zad2/test.c" />
+    <entry file="file://$PROJECT_DIR$/xd.c" />
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -448,32 +659,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1062">
           <caret line="59" column="1" lean-forward="false" selection-start-line="59" selection-start-column="1" selection-end-line="59" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xd.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding>
-            <element signature="e#43#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zad2/test.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2682">
-          <caret line="149" column="0" lean-forward="false" selection-start-line="149" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
-          <folding>
-            <element signature="e#57#77#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/xd.c" />
+    <entry file="file://$PROJECT_DIR$/zad2/test.c" />
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -502,9 +693,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="4" column="19" lean-forward="false" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -535,9 +724,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1170">
           <caret line="65" column="33" lean-forward="false" selection-start-line="65" selection-start-column="33" selection-end-line="65" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -575,9 +762,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -593,9 +778,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="63">
           <caret line="3" column="9" lean-forward="false" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -641,9 +824,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="63">
           <caret line="3" column="19" lean-forward="true" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -667,9 +848,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
           <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -692,9 +871,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
           <caret line="4" column="5" lean-forward="false" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -706,66 +883,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="24" column="13" lean-forward="false" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="36" column="1" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
-          <folding>
-            <element signature="e#43#63#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xd.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding>
-            <element signature="e#43#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/xd.c" />
+    <entry file="file://$PROJECT_DIR$/zad2/test.c" />
+    <entry file="file://$PROJECT_DIR$/test.c" />
     <entry file="file://$PROJECT_DIR$/library.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="13" column="63" lean-forward="false" selection-start-line="13" selection-start-column="63" selection-end-line="13" selection-end-column="63" />
+        <state relative-caret-position="180">
+          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1731">
+          <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dyn_main.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1839">
+          <caret line="91" column="0" lean-forward="false" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="717">
+          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10">
-          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        <state relative-caret-position="483">
+          <caret line="70" column="47" lean-forward="false" selection-start-line="70" selection-start-column="47" selection-end-line="70" selection-end-column="47" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/library.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1062">
-          <caret line="59" column="1" lean-forward="false" selection-start-line="59" selection-start-column="1" selection-end-line="59" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zad2/test.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="186" column="6" lean-forward="false" selection-start-line="186" selection-start-column="6" selection-end-line="186" selection-end-column="6" />
-          <folding>
-            <element signature="e#57#77#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
