@@ -2,34 +2,9 @@
 #include <fcntl.h>
 #include <zconf.h>
 #include <stdio.h>
+#include <memory.h>
 #include "library.h"
 
-void system_generate(char *file_name, int records, int record_length){
-
-    char *string = malloc(record_length * sizeof(char));
-
-    int file_desc = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
-    int rand_desc = open("/dev/random", O_RDONLY);
-
-    for(int i = 0 ; i < records ; i++){
-        if(read(rand_desc, string, (size_t)record_length * sizeof(char)) != record_length){
-            printf("Error while opening %s!\n", file_name);
-            return;
-        }
-
-        for(int j = 0 ; j < record_length ; j++) {
-            string[j] = (char) (abs(string[j]) % 25 + 65);
-        }
-        string[record_length-1] = 10;
-        if(write(file_desc, string, (size_t)record_length * sizeof(char)) != record_length) {
-            printf("Error while writing to %s!\n", file_name);
-            return;
-        }
-    }
-    close(file_desc);
-    close(rand_desc);
-    free(string);
-}
 
 void system_copy(char *source_file, char *target_file, int records, int record_length){
 
@@ -116,22 +91,20 @@ void system_sort(char *source_file, int records, int record_length) {
     free(key);
 }
 
-void library_generate(char *file_name, int records, int record_length){
+void generate(char *file_name, int records, int record_length){
 
-    char *string = malloc(record_length * sizeof(char));
+    char *string = malloc((record_length) * sizeof(char));
 
     FILE *file = fopen(file_name, "w+");
-    FILE *rand = fopen("/dev/random", "r");
 
     for(int i = 0 ; i < records ; i++){
-        if(fread(string, sizeof(char), (size_t)record_length, rand) != record_length){
-            printf("Error while reading from %s!\n", file_name);
-            return;
+
+        char *table = "ABCDEFGHIJKLMNOPRSTUWVXYZ";
+        for (int i = 0 ; i < record_length; i++){
+            string[i] = table[rand() % strlen(table)];
         }
 
-        for(int j = 0 ; j < record_length ; j++) {
-            string[j] = (char) (abs(string[j]) % 25 + 65);
-        }
+
         string[record_length-1] = 10;
         if(fwrite(string, sizeof(char), (size_t)record_length, file) != record_length) {
             printf("Error while writing to %s!\n", file_name);
@@ -139,7 +112,6 @@ void library_generate(char *file_name, int records, int record_length){
         }
     }
     fclose(file);
-    fclose(rand);
     free(string);
 }
 
