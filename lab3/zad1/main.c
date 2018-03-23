@@ -100,6 +100,7 @@ void find(char *path, int mode, time_t datetime) {
                 while ((pid = waitpid(pid, &status, 0)) == 0);
                 exit(EXIT_SUCCESS);
             }
+            
 
         } else if (dir->d_type == DT_REG) { //if its reg compare modification date and print info
             if (compare(mode, datetime, buffer->st_mtime)) {
