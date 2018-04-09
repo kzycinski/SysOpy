@@ -8,16 +8,14 @@
 #include <unistd.h>
 
 int is_paused = 0;
-pid_t child_pid;
+static char* parameters[2] = {"./date.sh", 0};
+int is_dead= 0;
 
 void start_child();
 
 void sigtstp_handler(int sig_no){
     if(!is_paused) {
-        kill(child_pid, SIGKILL);
         printf("\nOczekuję na CTRL+Z - kontynuacja albo CTR+C - zakonczenie programu\n");
-    } else {
-        start_child();
     }
     is_paused = is_paused == 1 ? 0 : 1;
 }
@@ -28,20 +26,34 @@ void sigint_handler(int sig_no){
 }
 
 void start_child(){
-    pid_t pid = fork();
-    if (pid < 0){
-        printf("Fork failed!\n");
-        exit(1);
-    } else if(pid == 0){
-        while(1) {
-            static char* parameters[2] = {"date", NULL};
-            execvp(parameters[0], parameters);
-            exit(0);
+    pid_t child_pid = fork();
+
+    if (child_pid == 0){
+        execvp(parameters[0], parameters);
+        exit(0);
+    }
+
+    while(1){
+        if(is_paused == 0) {
+            if(is_dead){
+                is_dead = 0;
+
+                child_pid = fork();
+                if (child_pid == 0){
+
+                    execvp(parameters[0], parameters);
+                    exit(0);
+                }
+            }
+        } else {
+            if (is_dead == 0) {
+                kill(child_pid, SIGKILL);
+                is_dead = 1;
+            }
         }
-    } else {
-        child_pid = pid;
     }
 }
+
 
 int main() {
 
@@ -53,10 +65,6 @@ int main() {
     sigaction(SIGTSTP, &act, NULL);
     signal(SIGINT, sigint_handler);
 
-    while (1) {
-        if (!is_paused) {
-            start_child();
-        }
-        sleep(1);
-    }
+    start_child();
+
 }
