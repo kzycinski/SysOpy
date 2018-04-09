@@ -43,6 +43,8 @@ int main(int argc, char const *argv[]) {
         }
         free(tmp);
         args[arguments] = 0;
+        if (args[0] == NULL) 
+            continue;
 
         pid_t pid = fork();
 
