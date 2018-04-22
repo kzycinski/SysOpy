@@ -5,8 +5,10 @@
 #define END 5
 #define REPLY 6
 #define UNKNOWN 7
+#define CLOSED 8
 
 #define MAX_LENGTH 50
+#define MAX_CLIENTS 100
 
 struct msg_buf {
     long msg_type;

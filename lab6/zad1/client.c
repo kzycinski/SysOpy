@@ -8,19 +8,15 @@
 
 #include "msg_buf.h"
 
-void sig_handler(int sig)
-{
-    if (sig == SIGINT)
-    {
+void sig_handler(int sig) {
+    if (sig == SIGINT) {
         printf("\nShutting down\n");
         exit(EXIT_SUCCESS);
-    }
-    else if (sig == SIGSEGV)
+    } else if (sig == SIGSEGV)
         printf("Wtf");
 }
 
-void set_sigint()
-{
+void set_sigint() {
     struct sigaction sig;
     sig.sa_handler = sig_handler;
     sigfillset(&sig.sa_mask);
@@ -41,7 +37,7 @@ void init(struct msg_buf *msg_buf, int server_q, int client_q) {
     sprintf(msg_buf->msg_text, "%d", client_q);
     msg_buf->client_id = 0;
 
-    if(msgsnd(server_q, msg_buf, sizeof(struct msg_buf) - sizeof(long), 0) == -1) {
+    if (msgsnd(server_q, msg_buf, sizeof(struct msg_buf) - sizeof(long), 0) == -1) {
         printf("Client- INIT failed\n");
         exit(1);
     }
@@ -56,40 +52,44 @@ void parse_line(char *buf, struct msg_buf *msg_buf) {
     if (strcmp(type, "MIRROR") == 0) {
         msg_buf->msg_type = MIRROR;
         strcpy(msg_buf->msg_text, strtok(NULL, " \n"));
-    }
-    else if (strcmp(type, "CALC") == 0) {
+    } else if (strcmp(type, "CALC") == 0) {
         msg_buf->msg_type = CALC;
-    }
-    else if (strcmp(type, "TIME") == 0) {
+    } else if (strcmp(type, "TIME") == 0) {
         msg_buf->msg_type = TIME;
         strcpy(msg_buf->msg_text, "");
-    }
-    else if (strcmp(type, "END") == 0) {
+    } else if (strcmp(type, "END") == 0) {
         msg_buf->msg_type = END;
         strcpy(msg_buf->msg_text, "end");
-    }
-    else {
+    } else {
         msg_buf->msg_type = UNKNOWN;
         strcpy(msg_buf->msg_text, "");
     }
 }
 
 void file_mode(FILE *file, struct msg_buf *msg_buf, int server_q, int client_q) {
-    char *buf = (char *)malloc(100 * sizeof(char));
+    char *buf = (char *) malloc(100 * sizeof(char));
     while (fgets(buf, 100, file) != NULL) {
+
+        if (msg_buf->msg_type == CLOSED) {
+            printf("No response from server");
+            exit(1);
+        }
         printf("%s", buf);
         if (strlen(buf) > MAX_LENGTH) {
             printf("Too long command\n");
             continue;
         }
         parse_line(buf, msg_buf);
-        if(msgsnd(server_q, msg_buf, sizeof(struct msg_buf) - sizeof(long), 0) == -1) {
+        if (msgsnd(server_q, msg_buf, sizeof(struct msg_buf) - sizeof(long), 0) == -1) {
             printf("Client-send failed\n");
         }
-        if(strcmp(msg_buf->msg_text, "end") == 0)
+        if (strcmp(msg_buf->msg_text, "end") == 0)
             return;
 
-        msgrcv(client_q, msg_buf, sizeof(struct msg_buf) - sizeof(long), 0, 0);
+        if (msgrcv(client_q, msg_buf, sizeof(struct msg_buf) - sizeof(long), 0, 0) == -1) {
+            printf("No response from server");
+            exit(1);
+        }
 
         printf("%s\n", msg_buf->msg_text);
     }
@@ -97,7 +97,7 @@ void file_mode(FILE *file, struct msg_buf *msg_buf, int server_q, int client_q) 
 }
 
 void input_mode(FILE *file, struct msg_buf *msg_buf, int server_q, int client_q) {
-    char *buf = (char *)malloc(100 * sizeof(char));
+    char *buf = (char *) malloc(100 * sizeof(char));
     int timeToEnd = 0;
 
     while (fgets(buf, 100, file) != NULL) {
@@ -111,21 +111,27 @@ void input_mode(FILE *file, struct msg_buf *msg_buf, int server_q, int client_q)
 
         parse_line(buf, msg_buf);
 
-        if(msgsnd(server_q, msg_buf, sizeof(struct msg_buf) - sizeof(long), 0) == -1) {
+        if (msgsnd(server_q, msg_buf, sizeof(struct msg_buf) - sizeof(long), 0) == -1) {
             printf("Client-send failed\n");
             raise(SIGINT);
         }
 
         if (timeToEnd)
             break;
-        msgrcv(client_q, msg_buf, sizeof(struct msg_buf) - sizeof(long), 0, 0);
-
+        if (msgrcv(client_q, msg_buf, sizeof(struct msg_buf) - sizeof(long), 0, 0) == -1) {
+            printf("No response from server");
+            exit(1);
+        }
+        if (msg_buf->msg_type == CLOSED) {
+            printf("No response from server\n");
+            exit(1);
+        }
         printf("%s\n", msg_buf->msg_text);
     }
 }
 
-int main(int argc, char **argv){
-    if (argc > 2){
+int main(int argc, char **argv) {
+    if (argc > 2) {
         printf("Too many arguments!\n");
         exit(1);
     }
@@ -137,7 +143,7 @@ int main(int argc, char **argv){
         exit(1);
     }
 
-    if ((client_q = msgget(IPC_PRIVATE,  S_IRWXU | S_IRWXG | S_IRWXO)) == -1) {
+    if ((client_q = msgget(IPC_PRIVATE, S_IRWXU | S_IRWXG | S_IRWXO)) == -1) {
         printf("Error with clientq\n");
         exit(1);
     }
@@ -148,19 +154,18 @@ int main(int argc, char **argv){
 
     FILE *file;
 
-    if(argc == 2) {
+    if (argc == 2) {
         if ((file = fopen(argv[1], "r")) == NULL) {
             printf("File opening error\n");
             exit(1);
         }
         file_mode(file, &msg_buf, server_q, client_q);
-    }
-    else {
+    } else {
         file = stdin;
         input_mode(file, &msg_buf, server_q, client_q);
     }
 
-    if(msgctl(client_q, IPC_RMID, NULL) == 0) {
+    if (msgctl(client_q, IPC_RMID, NULL) == 0) {
         printf("Clientq success\n");
     }
 

@@ -9,9 +9,16 @@
 #include "msg_buf.h"
 
 
+int next_id = 0;
+struct msg_buf msg;
+int clients[MAX_CLIENTS];
 
 void sig_handler(int sig)
 {
+    msg.msg_type = CLOSED;
+    for(int i = 0; i < next_id; i++) {
+        msgsnd(clients[i], &msg, sizeof(struct msg_buf) - sizeof(long), 0);
+    }
     if (sig == SIGINT)
     {
         printf("Interrupting server...\n");
@@ -134,38 +141,35 @@ void time_func(struct msg_buf *msg_buf) {
 }
 
 int main() {
-    set_sigint();
 
+    set_sigint();
     int server_q;
     if ((server_q = msgget(ftok("msgbuf.h", 0), S_IRWXU | S_IRWXG | S_IRWXO | IPC_CREAT)) == -1) {
         printf("Error while making queue in server\n");
         exit(1);
     }
 
-    int *clients = malloc(100 * sizeof(int));
-    int next_id = 0;
 
-    struct msg_buf msg_buf;
     struct msqid_ds stat;
     int is_ended = 0;
     int msg_left = 1;
     while (msg_left) {
         if(!is_ended) {
-            msgrcv(server_q, &msg_buf, sizeof(struct msg_buf) - sizeof(long), 0, 0);
+            msgrcv(server_q, &msg, sizeof(struct msg_buf) - sizeof(long), 0, 0);
         }
-        switch (msg_buf.msg_type) {
+        switch (msg.msg_type) {
             case INIT:
-                init_func(clients, next_id, &msg_buf);
+                init_func(clients, next_id, &msg);
                 next_id++;
                 break;
             case MIRROR:
-                mirror_func(&msg_buf);
+                mirror_func(&msg);
                 break;
             case CALC:
-                calc_func(&msg_buf);
+                calc_func(&msg);
                 break;
             case TIME:
-                time_func(&msg_buf);
+                time_func(&msg);
                 break;
             case END:
                 msgctl(server_q, IPC_STAT, &stat);
@@ -173,13 +177,11 @@ int main() {
                 is_ended = 1;
                 continue;
             default:
-                msg_buf.msg_type = REPLY;
-                strcpy(msg_buf.msg_text, "Unknown command");
+                msg.msg_type = REPLY;
+                strcpy(msg.msg_text, "Unknown command");
                 break;
         }
-        if (msgsnd(clients[msg_buf.client_id], &msg_buf, sizeof(struct msg_buf) - sizeof(long), 0) == -1) {
-            printf("Msgsnd failed\n");
-        }
+        msgsnd(clients[msg.client_id], &msg, sizeof(struct msg_buf) - sizeof(long), 0);
         if (is_ended) msg_left--;
     }
     printf("Closing server...\n");
