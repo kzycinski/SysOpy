@@ -104,9 +104,8 @@ void calc_func(struct msg_buf *msg_buf) {
             break;
         case '/':
             if (num2) {
-                printf("%d", num1/num2);
                 result = (num1 / num2);
-                sprintf(msg_buf->msg_text, "%d", (num1/num2));
+                sprintf(msg_buf->msg_text, "%d", result);
             }
             else {
                 strcpy(msg_buf->msg_text, "Can't divide by 0!");
