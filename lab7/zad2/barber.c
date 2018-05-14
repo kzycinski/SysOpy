@@ -1,150 +1,232 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
-#include <sys/wait.h>
-#include <sys/sem.h>
-#include <sys/shm.h>
-#include <sys/ipc.h>
+#include <unistd.h>
+#include <signal.h>
+#include <ctype.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/mman.h>
-#include <fcntl.h>
-#include <zconf.h>
+#include <sys/wait.h>
 #include <semaphore.h>
-#include <errno.h>
-
+#include <sys/mman.h>
 #include "common.h"
 
+int mem_barbershop;
+sem_t *sem_waiting_room;
+sem_t *sem_chair;
+sem_t *sem_shaving;
+sem_t *sem_shaving_room;
 
-int shared_memory_fd;
-sem_t *semaphore;
+struct barbershop *barbershop;
+int should_wake_up;
 
-void clean_up() {
-    if (semaphore != NULL) {
-        sem_close(semaphore);
-        sem_unlink(PROJECT_PATH);
+
+void init_barber(int waiting_room_size) {
+
+    sem_waiting_room = sem_open(SEM_WTROOM_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 0);
+    sem_chair = sem_open(SEM_CHAIR_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 0);
+    sem_shaving = sem_open(SEM_SHAVING_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 0);
+    sem_shaving_room = sem_open(SEM_SHVROOM_NAME, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 0);
+
+    mem_barbershop = shm_open(MEM_BRBSHOP_NAME, O_CREAT | O_EXCL | O_RDWR, S_IWUSR | S_IRUSR);
+    ftruncate(mem_barbershop, sizeof(struct barbershop));
+
+
+    barbershop = (struct barbershop *) mmap(NULL, sizeof(struct barbershop), PROT_READ | PROT_WRITE, MAP_SHARED,
+                                            mem_barbershop, 0);
+
+    if (barbershop == (void *) -1) {
+        perror("Barber - memory\n");
+        exit(1);
     }
 
-    if (shared_memory_fd != 0) {
-        close(shared_memory_fd);
-        shm_unlink(PROJECT_PATH);
-    }
+
+    barbershop->empty_sits_number = waiting_room_size;
+    init_queue(&(barbershop->clients_queue), waiting_room_size);
+    barbershop->barber_pid = getpid();
+    barbershop->is_sleeping = 0;
+    barbershop->shaved_client_pid = -1;
 }
 
-void handle_signal(int _) {
-    clean_up();
-    printf("\nAborting...\n");
+void fall_asleep() {
+
+    barbershop->is_sleeping = 1;
+
+    sigset_t tmp_mask, old_mask;
+    sigemptyset(&tmp_mask);
+    sigaddset(&tmp_mask, SIG_WAKEUP);
+    sigprocmask(SIG_BLOCK, &tmp_mask, &old_mask);
+
+    print_msg("No clients, falling asleep\n");
+    should_wake_up = 0;
+    sem_post(sem_waiting_room);
+
+    while (should_wake_up == 0)
+        sigsuspend(&old_mask);
+
+    sigprocmask(SIG_SETMASK, &old_mask, NULL);
+    barbershop->is_sleeping = 0;
+}
+
+void shave() {
+
+    sem_post(sem_shaving_room);
+
+    sem_wait(sem_chair);
+
+    print_msg("");
+    fprintf(stdout, "Started shaving: %d\n", barbershop->shaved_client_pid);
+
+    print_msg("");
+    fprintf(stdout, "Finished shaving: %d\n", barbershop->shaved_client_pid);
+
+    sem_post(sem_shaving);
+
+}
+
+int invite() {
+
+    sem_wait(sem_waiting_room);
+
+    pid_t next_client_pid = dequeue(&(barbershop->clients_queue));
+
+    if (next_client_pid == -1)
+        return 0;
+
+    barbershop->empty_sits_number++;
+    print_msg("");
+    fprintf(stdout, "Inviting %d \n", next_client_pid);
+    kill(next_client_pid, SIG_INVITE);
+    sem_post(sem_waiting_room);
+    return 1;
+}
+
+static void exit_fun() {
+
+    if (mem_barbershop != -1) {
+
+        if (munmap(barbershop, sizeof(struct barbershop)))
+            perror("Barber - munmap\n");
+
+        if (shm_unlink(MEM_BRBSHOP_NAME) == -1)
+            perror("Barber - unlink\n");
+    }
+
+    if (sem_waiting_room != (sem_t *) -1) {
+
+        if (sem_close(sem_waiting_room) == -1)
+            perror("Barber - semclose\n");
+
+        if (sem_unlink(SEM_WTROOM_NAME) == -1)
+            perror("Barber - semunlink\n");
+    }
+
+    if (sem_chair != (sem_t *) -1) {
+
+        if (sem_close(sem_chair) == -1)
+            perror("Barber - semclose\n");
+        if (sem_unlink(SEM_CHAIR_NAME) == -1)
+            perror("Barber - semunlink\n");
+    }
+
+    if (sem_shaving != (sem_t *) -1) {
+
+        if (sem_close(sem_shaving) == -1)
+            perror("Barber - semclose\n");
+        if (sem_unlink(SEM_SHAVING_NAME) == -1)
+            perror("Barber - semunlink\n");
+    }
+
+    if (sem_shaving_room != (sem_t *) -1) {
+
+        if (sem_close(sem_shaving_room) == -1)
+            perror("Barber - semclose\n");
+        if (sem_unlink(SEM_SHVROOM_NAME) == -1)
+            perror("Barber - semunlink\n");
+    }
+
+}
+
+void handler_sigint(int signo) {
+
+    fprintf(stderr, "Aborting...\n");
+    exit(1);
+}
+
+void handler_sigterm(int signo) {
+
+    fprintf(stderr, "Aborting...\n");
     exit(0);
 }
 
-void invite_client() {
-    pid_t client_pid = barber_shop->queue[0];
-    barber_shop->current_client = client_pid;
-    printf("Invited client %i\tTime: %lo\n", client_pid, get_time());
+void sig_wakeup(int signo) {
 
-    for (int i = 0; i < barber_shop->clients - 1; ++i) {
-        barber_shop->queue[i] = barber_shop->queue[i + 1];
-    }
-    barber_shop->queue[barber_shop->clients - 1] = 0;
-    barber_shop->clients -= 1;
+    should_wake_up = 1;
+    print_msg("Waking up\n");
 }
 
-void serve_client() {
-    printf("Shaving client %i\tTime: %lo\n", barber_shop->current_client, get_time());
-
-    printf("Finished client %i\tTime: %lo\n", barber_shop->current_client, get_time());
-
-    barber_shop->current_client = 0;
-}
-
-
-void init(int argc, char **argv) {
-
-    signal(SIGTERM, handle_signal);
-    signal(SIGINT, handle_signal);
-    atexit(clean_up);
-
-    if (argc < 2)
-        ext("Not enough arguments \n");
-
-
-    int waiting_room_size = (int) strtol(argv[1], 0, 10);
-    if (waiting_room_size > MAX_QUEUE_SIZE) {
-        char buffer[50];
-        sprintf(buffer, "Waiting room size has to be less than %i \n", MAX_QUEUE_SIZE);
-        ext(buffer);
-    }
-
-
-    shared_memory_fd = shm_open(PROJECT_PATH, O_CREAT | O_EXCL | O_RDWR, 0774);
-
-    if (shared_memory_fd == -1)
-    {
-        printf("%d\n", errno);
-        ext("Barber - shm_open\n");
-    }
-
-    if (ftruncate(shared_memory_fd, sizeof(struct Barbershop)) < 0)
-        ext("Ftruncate");
-
-    barber_shop = mmap(NULL, sizeof(struct Barbershop), \
-                                 PROT_READ | PROT_WRITE | PROT_EXEC, MAP_SHARED, shared_memory_fd, 0);
-
-    if (barber_shop == MAP_FAILED)
-        ext("Barber - mmap\n");
-
-    sem_t *xd = sem_open(PROJECT_PATH, O_CREAT | O_EXCL | O_RDWR, 0774, 0);
-
-    if (xd == SEM_FAILED) {
-        printf("%d\n", errno);
-        ext("Barber - sem_open\n");
-    }
-
-    semaphore = xd;
-
-    barber_shop->barber_status = BARBER_SLEEPING;
-    barber_shop->queue_size = waiting_room_size;
-
-    barber_shop->clients = 0;
-    barber_shop->current_client = 0;
-
-    for (int i = 0; i < MAX_QUEUE_SIZE; ++i)
-        barber_shop->queue[i] = 0;
-
-}
 
 int main(int argc, char **argv) {
 
-    init(argc, argv);
+    mem_barbershop = -1;
+    sem_waiting_room = (sem_t *) -1;
+    sem_chair = (sem_t *) -1;
+    sem_shaving = (sem_t *) -1;
+    sem_shaving_room = (sem_t *) -1;
+    should_wake_up = 0;
+
+    if (atexit(exit_fun) != 0) {
+
+        perror("Barber - atexit\n");
+        exit(1);
+    }
+
+    struct sigaction act;
+    act.sa_handler = handler_sigint;
+    sigemptyset(&act.sa_mask);
+    act.sa_flags = 0;
+
+    if (sigaction(SIGINT, &act, NULL) == -1) {
+
+        perror("Barber - sigint\n");
+        exit(1);
+    }
+
+    act.sa_handler = handler_sigterm;
+
+    if (sigaction(SIGTERM, &act, NULL) == -1) {
+
+        perror("Barber - sigterm\n");
+        exit(1);
+    }
+
+
+    act.sa_handler = sig_wakeup;
+
+    if (sigaction(SIG_WAKEUP, &act, NULL) == -1) {
+
+        perror("Barber - sigwakeup\n");
+        exit(1);
+    }
+
+    if (argc != 2) {
+        printf("Wrong arguments\n");
+        exit(1);
+    }
+
+    int queue_size = (int) strtol(argv[1], NULL, 10);
+
+    init_barber(queue_size);
 
     while (1) {
-        sem_post(semaphore);
-        switch (barber_shop->barber_status) {
-            case BARBER_IDLE:
-                if (is_full()) {
-                    printf("Falls asleep\t\tTime: %lo\n", get_time());
-                    barber_shop->barber_status = BARBER_SLEEPING;
-                } else {
-                    invite_client();
-                    barber_shop->barber_status = BARBER_BUSY;
-                }
-                break;
-            case BARBER_AWOKEN:
-                printf("Woke up\t\t\tTime: %lo\n", get_time());
-                if (barber_shop->current_client != 0) {
-                    barber_shop->barber_status = BARBER_BUSY;
-                    break;
-                }
 
-                barber_shop->barber_status = BARBER_IDLE;
-                break;
-            case BARBER_BUSY:
-                serve_client();
-                barber_shop->barber_status = BARBER_IDLE;
-                break;
-            default:
-                break;
-        }
-        sem_wait(semaphore);
+        fall_asleep();
+        shave();
+
+        while (invite() == 1)
+            shave();
+
     }
 }

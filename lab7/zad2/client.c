@@ -1,104 +1,162 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
-#include <errno.h>
-#include <zconf.h>
+#include <unistd.h>
+#include <signal.h>
+#include <ctype.h>
 #include <fcntl.h>
-#include <sys/wait.h>
-#include <sys/sem.h>
-#include <sys/shm.h>
-#include <sys/ipc.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/mman.h>
-#include <signal.h>
+#include <sys/wait.h>
 #include <semaphore.h>
-
+#include <sys/mman.h>
 #include "common.h"
 
+int mem_barbershop;
+sem_t *sem_waiting_room;
+sem_t *sem_chair;
+sem_t *sem_shaving;
+sem_t *sem_shaving_room;
 
-int client_status;
-int shared_memory_fd;
-sem_t *semaphore;
+struct barbershop *barbershop;
+
+int is_invited;
+
+void init_client() {
+
+    sem_waiting_room = sem_open(SEM_WTROOM_NAME, 0);
+    sem_chair = sem_open(SEM_CHAIR_NAME, 0);
+    sem_shaving = sem_open(SEM_SHAVING_NAME, 0);
+    sem_shaving_room = sem_open(SEM_SHVROOM_NAME, 0);
 
 
-void init() {
-    shared_memory_fd = shm_open(PROJECT_PATH, O_RDWR, 0774);
-    if (shared_memory_fd == -1)
-        ext("Client - shm_open\n");
+    if (sem_waiting_room == SEM_FAILED || sem_chair == SEM_FAILED
+        || sem_shaving == SEM_FAILED || sem_shaving_room == SEM_FAILED) {
+        perror("Client - sem\n");
+        exit(1);
+    }
 
-    barber_shop = mmap(0, sizeof(struct Barbershop), PROT_READ | PROT_WRITE, MAP_SHARED, shared_memory_fd, 0);
+    mem_barbershop = shm_open(MEM_BRBSHOP_NAME, O_RDWR, 0);
+    barbershop = (struct barbershop *) mmap(NULL, sizeof(struct barbershop), PROT_READ | PROT_WRITE, MAP_SHARED,
+                                            mem_barbershop, 0);
 
-    if (barber_shop == (void *) -1)
-        ext("Client - mmap\n");
-
-    semaphore = sem_open(PROJECT_PATH, 0);
-    if (semaphore == SEM_FAILED)
-        ext("Client - sem_open\n");
-}
-
-void run_client(int cuts) {
-    pid_t pid = getpid();
-    for (int j = 0; j < cuts; ++j) {
-        client_status = CLIENT_NEW;
-
-        sem_post(semaphore);
-
-        if (barber_shop->barber_status == BARBER_SLEEPING) {
-            if (barber_shop->current_client != 0)
-                ext("Barber cannot shave while sleeping!\n");
-
-            printf("Client %i: Waking up barber\t\tTime: %lo\n", pid, get_time());
-            barber_shop->barber_status = BARBER_AWOKEN;
-
-            barber_shop->current_client = pid;
-
-        } else if (!is_full()) {
-            enter_queue(pid);
-            printf("Client %i: Entering queue\t\tTime: %lo\n", pid, get_time());
-        } else {
-            printf("Client %i: Queue full, client leaves\tTime: %lo\n", pid, get_time());
-            sem_wait(semaphore);
-            exit(0);
-        }
-        sem_wait(semaphore);
-
-        while (client_status ==  CLIENT_NEW) {
-            sem_post(semaphore);
-            if (barber_shop->current_client == pid) {
-                client_status = CLIENT_SITTING;
-                printf("Client %i: Sitting on chair\t\tTime: %lo\n", pid, get_time());
-            }
-
-            sem_wait(semaphore);
-        }
-
-        while (client_status == CLIENT_SITTING) {
-            if (client_status == CLIENT_SITTING && barber_shop->current_client != pid) {
-                client_status = CLIENT_SHAVED;
-                printf("Client %i: Shaved\t\t\tTime: %lo\n", pid, get_time());
-            }
-        }
+    if (barbershop == (void *) -1) {
+        perror("Client - mem\n");
+        exit(1);
     }
 }
 
+void handler_sigwakeup() {
+
+    print_msg("Waking up the barber\n");
+    kill(barbershop->barber_pid, SIG_WAKEUP);
+}
+
+void wait_q() {
+
+    enqueue(&(barbershop->clients_queue), getpid());
+    barbershop->empty_sits_number--;
+
+    sigset_t tmp_mask, old_mask;
+    sigemptyset(&tmp_mask);
+    sigaddset(&tmp_mask, SIG_INVITE);
+    sigprocmask(SIG_BLOCK, &tmp_mask, &old_mask);
+
+    print_msg("Sitting in queue\n");
+
+    is_invited = 0;
+    sem_post(sem_waiting_room);
+
+    while (is_invited == 0)
+        sigsuspend(&old_mask);
+
+    sigprocmask(SIG_SETMASK, &old_mask, NULL);
+}
+
+void sit_on_chair() {
+
+    sem_wait(sem_shaving_room);
+    print_msg("Sitting on chair\n");
+    barbershop->shaved_client_pid = getpid();
+    sem_post(sem_chair);
+}
+
+void get_shaved() {
+
+    sem_wait(sem_shaving);
+    print_msg("Shaved - leaving\n");
+}
+
+int enter_barbershop() {
+
+    sem_wait(sem_waiting_room);
+
+    if (barbershop->is_sleeping == 1) {
+        handler_sigwakeup();
+        sit_on_chair();
+        sem_post(sem_waiting_room);
+        get_shaved();
+    } else {
+
+        if (barbershop->empty_sits_number > 0) {
+            wait_q();
+            sit_on_chair();
+            get_shaved();
+        } else {
+            print_msg("Queue full, leaving\n");
+            sem_post(sem_waiting_room);
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+void client_control(int shavings) {
+
+    int times_shaved = 0;
+
+    while (times_shaved < shavings)
+        times_shaved += enter_barbershop();
+}
+
+void handler_siginvite(int signo) {
+    is_invited = 1;
+}
 
 int main(int argc, char **argv) {
-    if (argc < 3)
-        ext("Not enough arguments \n");
 
-    int clients_number = (int) strtol(argv[1], 0, 10);
-    int cuts = (int) strtol(argv[2], 0, 10);
+    struct sigaction act;
+    act.sa_handler = handler_siginvite;
+    sigemptyset(&act.sa_mask);
+    act.sa_flags = 0;
 
-    init();
+    if (sigaction(SIG_INVITE, &act, NULL) == -1) {
 
-    for (int i = 0; i < clients_number; ++i) {
-        if (!fork()) {
-            run_client(cuts);
-            exit(0);
+        perror("Client - sigaction");
+        exit(1);
+    }
+
+    if (argc != 3) {
+        printf("Wrong arguments\n");
+        exit(1);
+    }
+
+    int clients = (int) strtol(argv[1], NULL, 10);
+    int shavings = (int) strtol(argv[1], NULL, 10);
+
+    init_client();
+
+    for (int i = 0; i < clients; i++) {
+        pid_t id = fork();
+
+        if (id == 0) {
+            client_control(shavings);
+            return 0;
         }
     }
-    while (wait(0))
-        if (errno != ECHILD)
-            break;
+
+    for (int i = 0; i < clients; i++)
+        wait(NULL);
 }
