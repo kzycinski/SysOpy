@@ -1,23 +1,26 @@
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <fcntl.h>
 #include <pthread.h>
-#include <sys/resource.h>
-#include <sys/time.h>
 #include <math.h>
-#include <zconf.h>
+#include <memory.h>
+#include <time.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <unistd.h>
 
-
-int **input_file;
-int **output_file;
-float **filter;
+int *input_file;
+int *output_file;
+double *filter;
 int img_width;
 int img_height;
-int pixel_max;
 int c;
-int threads;
+char shit[2];
+int max_value;
+int threads_no;
+int pixels_count;
+
 
 void print_info() {
     printf("Please use following pattern to run the progran:\n");
@@ -30,11 +33,11 @@ double calc_realtime(struct timeval start, struct timeval end) {
 }
 
 double calc_usertime(struct rusage *r_usage) {
-    return (((float) (r_usage->ru_utime.tv_sec) * 1000000) + r_usage->ru_utime.tv_usec) / 1000000;
+    return (((double) (r_usage->ru_utime.tv_sec) * 1000000) + r_usage->ru_utime.tv_usec) / 1000000;
 }
 
 double calc_systemtime(struct rusage *r_usage) {
-    return (((float) (r_usage->ru_stime.tv_sec) * 1000000) + r_usage->ru_stime.tv_usec) / 1000000;
+    return (((double) (r_usage->ru_stime.tv_sec) * 1000000) + r_usage->ru_stime.tv_usec) / 1000000;
 }
 
 int max(double a, double b) {
@@ -45,186 +48,153 @@ int min(double a, double b) {
     return (int) (a < b ? a : b);
 }
 
-void *thread_handler(void *argv) {
-    int thread_no = *(int *) argv;
-
-    int start_thread = img_width * thread_no / threads;
-    int end_thread = img_width * (thread_no + 1) / threads;
-
-    for (int i = start_thread; i < end_thread; i++) {
-
-        for (int j = 0; j < img_height; j++) {
-
-            double s_xy = 0;
-
-            for (int k = 0; k < c; k++) {
-                for (int m = 0; m < c; m++) {
-                    //s_xy += (input_file[max(1, i - ceil(c / 2) + k)][max(1, j - ceil(c) + m)] * filter[k][m]);
-                    s_xy += input_file[min(img_width - 1, max(0, i - ceil(c / 2) + k))]
-                            [min(img_height - 1, max(0, j - ceil(c / 2) + m))] * filter[k][m];
-                }
-            }
-
-            output_file[i][j] = (int) round(s_xy);
-        }
-    }
-
-    return NULL;
-}
-
-
-void scan_files(char **argv) {
-    char *buff = malloc(20 * sizeof(char));
+void load_files(char **argv) {
     FILE *file;
-    file = fopen(argv[2], "r");
-    if (file == NULL) {
+    if ((file = fopen(argv[2], "r")) == NULL) {
         printf("Cannot open the input file\n");
         exit(1);
     }
 
-    fscanf(file, "%s %d %d %d", buff, &img_width, &img_height, &pixel_max);
+    fscanf(file, "%s %d %d %d", shit, &img_width, &img_height, &max_value);
 
-    free(buff);
+    input_file = malloc(img_width * img_height * sizeof(*input_file));
+    output_file = malloc(img_width * img_height * sizeof(*output_file));
 
-    input_file = malloc(img_width * sizeof(int *));
-    output_file = malloc(img_width * sizeof(int *));
-
-    if (input_file == NULL || output_file == NULL) {
-        printf("Cannot allocate memory for i/o\n");
-        exit(1);
-    }
-
-    int tmp;
-
-    for (int i = 0; i < img_width; i++) {
-        input_file[i] = malloc(img_height * sizeof(int));
-        output_file[i] = malloc(img_height * sizeof(int));
-
-        if (input_file[i] == NULL || output_file[i] == NULL) {
-            printf("Cannot allocate memory for i/o\n");
-            exit(1);
-        }
-
-        for (int j = 0; j < img_height; j++) {
-            fscanf(file, "%d", &tmp);
-            input_file[i][j] = tmp;
-            output_file[i][j] = 0;
+    for (int i = 0; i < img_height; ++i) {
+        for (int j = 0; j < img_width; ++j) {
+            fscanf(file, "%d", &input_file[i * img_width + j]);
         }
     }
 
     fclose(file);
 
-    file = fopen(argv[3], "r");
-
-    if (file == NULL) {
+    if ((file = fopen(argv[3], "r")) == NULL) {
         printf("Cannot open the filter file\n");
         exit(1);
     }
 
     fscanf(file, "%d", &c);
 
-    filter = malloc(c * sizeof(float *));
-    if (filter == NULL) {
-        printf("Cannot allocate memory for filter i/o\n");
-        exit(1);
-    }
+    filter = malloc(c * c * sizeof(*filter));
 
-    float tmp2;
-
-    for (int i = 0; i < c; i++) {
-        filter[i] = malloc(c * sizeof(float));
-        if (filter[i] == NULL) {
-            printf("Cannot allocate memory for filter i/o\n");
-            exit(1);
-        }
-
-        for (int j = 0; j < c; j++) {
-            fscanf(file, "%f", &tmp2);
-            filter[i][j] = tmp2;
+    for (int i = 0; i < c; ++i) {
+        for (int j = 0; j < c; ++j) {
+            fscanf(file, "%lf", &filter[i * c + j]);
         }
     }
+
 
     fclose(file);
-    free(file);
 }
 
-void save_image(char *filename) {
-    FILE *file;
-    file = fopen(filename, "w");
 
-    if (file == NULL) {
+void *thread_handler(void *arg_void) {
+    int x;
+    int y;
+    double sum;
+    int a;
+    int b;
+
+    int thread_no = *(int *) arg_void;
+
+    int start_thread = thread_no * pixels_count;
+    int end_thread = min(start_thread + pixels_count, img_width * img_height);
+
+    for (int i = start_thread; i < end_thread; ++i) {
+        x = i / img_width;
+        y = i % img_width;
+
+        sum = 0;
+        for (int i = 0; i < c; ++i) {
+            for (int j = 0; j < c; ++j) {
+                a = min(img_height - 1, max(1, x - (int) ceil(c / 2) + i));
+                b = min(img_width - 1, max(1, y - (int) ceil(c / 2) + j));
+
+                sum += input_file[a * img_width + b] * filter[i * c + j];
+            }
+        }
+
+        output_file[i] = (int) round(sum);
+    }
+
+    return NULL;
+}
+
+void save_file(char *path) {
+    FILE *image;
+    if ((image = fopen(path, "w")) == NULL) {
         printf("Cannot open the result file\n");
         exit(1);
     }
 
-    fprintf(file, "P2\n%d %d\n255\n", img_width, img_height);
+    fprintf(image, "%s\n%d %d\n%d\n", shit, img_width, img_height, max_value);
 
-    for (int i = 0; i < img_width; i++) {
-        for (int j = 0; j < img_height; j++) {
-            fprintf(file, "%d ", output_file[i][j]);
+    for (int i = 0; i < img_height; ++i) {
+        for (int j = 0; j < img_width; ++j) {
+            fprintf(image, "%d ", output_file[i * img_width + j]);
         }
-        fprintf(file, "\n");
+        fprintf(image, "\n");
     }
 
-    fclose(file);
-    free(file);
+    fclose(image);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char *argv[]) {
     if (argc != 5) {
         printf("Wrong args\n");
         print_info();
         exit(1);
     }
+    struct timeval start, end;
+    struct rusage *r_usage = malloc(sizeof(struct rusage));
+    load_files(argv);
 
-    scan_files(argv);
+    sscanf(argv[1], "%d", &threads_no);
 
-    threads = (int) strtol(argv[1], NULL, 10);
+    pixels_count = (int) round(img_width * img_height / threads_no);
 
-    if (threads > sysconf(_SC_NPROCESSORS_ONLN)) {
+    if (threads_no > sysconf(_SC_NPROCESSORS_ONLN)) {
         printf("Warning: this system has only %ld processors available\n",
                sysconf(_SC_NPROCESSORS_ONLN));
     }
 
-    pthread_t *thread = malloc(threads * sizeof(pthread_t));
-    if (thread == NULL) {
-        printf("Cannot allocate memory for threads\n");
-        exit(1);
-    }
-    struct timeval start, end;
-    struct rusage *r_usage = malloc(sizeof(struct rusage));
-
     gettimeofday(&start, NULL);
 
-    for (int i = 0; i < threads; i++) {
+    pthread_t threads[threads_no];
+
+    for (int i = 0; i < threads_no; ++i) {
         int *arg_i = malloc(sizeof(int));
         *arg_i = i;
-        pthread_create(&thread[i], NULL, thread_handler, arg_i);
+        pthread_create(threads + i, NULL, thread_handler, arg_i);
     }
 
-    for (int i = 0; i < threads; i++) {
-        void *tmp;
-        pthread_join(thread[i], &tmp);
+    for (int i = 0; i < threads_no; ++i) {
+        pthread_join(threads[i], NULL);
     }
 
     gettimeofday(&end, NULL);
     getrusage(RUSAGE_SELF, r_usage);
 
+    save_file(argv[4]);
 
-    save_image(argv[4]);
-
-
-    printf("Threads: %d\tReal time: %fs\t User time: %fs\t System time: %fs\n", threads, calc_realtime(start, end),
+    printf("Threads: %d\tReal time: %fs\t User time: %fs\t System time: %fs\n", threads_no,
+           calc_realtime(start, end),
            calc_usertime(r_usage),
            calc_systemtime(r_usage));
 
     FILE *file = fopen("Times.txt", "a");
 
-    fprintf(file, "Threads: %d\tReal time: %fs\t User time: %fs\t System time: %fs\n", threads,
+    fprintf(file, "Threads: %d\tReal time: %fs\t User time: %fs\t System time: %fs\n", threads_no,
             calc_realtime(start, end), calc_usertime(r_usage),
             calc_systemtime(r_usage));
     fclose(file);
     free(file);
 
+
+    free(input_file);
+    free(output_file);
+    free(filter);
+
     return 0;
 }
+

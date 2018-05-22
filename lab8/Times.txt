@@ -1,4 +1,5 @@
-Threads: 1	Real time: 7.627801s	 User time: 7.648953s	 System time: 0.000000s
-Threads: 2	Real time: 3.883724s	 User time: 7.740809s	 System time: 0.004006s
-Threads: 4	Real time: 2.766997s	 User time: 7.802790s	 System time: 0.003956s
-Threads: 8	Real time: 2.694238s	 User time: 7.819125s	 System time: 0.003963s
+Threads: 1	Real time: 7.406726s	 User time: 7.432441s	 System time: 0.000000s
+Threads: 2	Real time: 3.887985s	 User time: 7.752702s	 System time: 0.003996s
+Threads: 4	Real time: 2.074373s	 User time: 7.948307s	 System time: 0.007976s
+Threads: 8	Real time: 2.066828s	 User time: 7.952916s	 System time: 0.007992s
+
