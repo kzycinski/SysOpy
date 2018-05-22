@@ -10,6 +10,9 @@
 #include <sys/resource.h>
 #include <unistd.h>
 
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+
 int *input_file;
 int *output_file;
 double *filter;
@@ -38,14 +41,6 @@ double calc_usertime(struct rusage *r_usage) {
 
 double calc_systemtime(struct rusage *r_usage) {
     return (((double) (r_usage->ru_stime.tv_sec) * 1000000) + r_usage->ru_stime.tv_usec) / 1000000;
-}
-
-int max(double a, double b) {
-    return (int) (a > b ? a : b);
-}
-
-int min(double a, double b) {
-    return (int) (a < b ? a : b);
 }
 
 void load_files(char **argv) {
@@ -197,4 +192,3 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-
