@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <errno.h>
 #include <pthread.h>
 #include <string.h>
 #include <assert.h>
 #include <unistd.h>
 #include <signal.h>
+#include <semaphore.h>
 
 #define EQUAL 1
 #define LESS 2
@@ -17,11 +17,11 @@
 int P, K, N, L, search_mode, print_mode, nk;
 FILE *source_file;
 char **buffer = NULL;
-int write_to = 0, read_from = 0, buffer_slots_taken = 0, client_exit_count = 0, can_exit = 0;
+int write_to = 0, read_from = 0, buffer_slots_taken = 0;
 
-pthread_mutex_t count_buffer_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t empty_buffer_cond = PTHREAD_COND_INITIALIZER;
-pthread_cond_t full_buffer_cond = PTHREAD_COND_INITIALIZER;
+sem_t slots_sem;
+sem_t free_sem;
+sem_t taken_sem;
 
 void print_info(){
     printf("Config file format:\n");
@@ -61,7 +61,7 @@ void consumer_print(char *buff, int read_from) {
             err("Wrong search_mode\n");
     }
     if (mode)
-        printf("%i -- %s\n", read_from, buff);
+        printf("%d -- %s\n", read_from, buff);
 }
 
 void *producer(void *arg) {
@@ -69,24 +69,23 @@ void *producer(void *arg) {
     while (1) {
         char *buff = NULL;
 
-        pthread_mutex_lock(&count_buffer_mutex);
-        while (buffer_slots_taken >= N)
-            pthread_cond_wait(&full_buffer_cond, &count_buffer_mutex);
+        sem_wait(&free_sem);
+        sem_wait(&slots_sem);
 
         if (getline(&buff, &n, source_file) <= 0) {
-            pthread_mutex_unlock(&count_buffer_mutex);
+            sem_post(&slots_sem);
             break;
         }
 
         if (print_mode == PRINT_ALL)
-            printf("Producer writes to %i", write_to);
+            printf("Producer writes to: %i\n", write_to);
 
         buffer[write_to] = buff;
         write_to = (write_to + 1) % N;
         buffer_slots_taken++;
 
-        pthread_cond_signal(&empty_buffer_cond);
-        pthread_mutex_unlock(&count_buffer_mutex);
+        sem_post(&taken_sem);
+        sem_post(&slots_sem);
 
         n = 0;
         buff = NULL;
@@ -97,14 +96,8 @@ void *producer(void *arg) {
 void *consumer(void *arg) {
     char *buff;
     while (1) {
-        pthread_mutex_lock(&count_buffer_mutex);
-        while (buffer_slots_taken <= 0) {
-            if (can_exit) {
-                client_exit_count++;
-                pthread_exit((void *) 0);
-            }
-            pthread_cond_wait(&empty_buffer_cond, &count_buffer_mutex);
-        }
+        sem_wait(&taken_sem);
+        sem_wait(&slots_sem);
 
         buff = buffer[read_from];
         buffer[read_from] = NULL;
@@ -116,8 +109,8 @@ void *consumer(void *arg) {
         read_from = (read_from + 1) % N;
         buffer_slots_taken--;
 
-        pthread_cond_signal(&full_buffer_cond);
-        pthread_mutex_unlock(&count_buffer_mutex);
+        sem_post(&free_sem);
+        sem_post(&slots_sem);
 
         free(buff);
     }
@@ -130,9 +123,9 @@ void ext() {
     if (source_file)
         fclose(source_file);
 
-    pthread_mutex_destroy(&count_buffer_mutex);
-    pthread_cond_destroy(&empty_buffer_cond);
-    pthread_cond_destroy(&full_buffer_cond);
+    sem_destroy(&slots_sem);
+    sem_destroy(&free_sem);
+    sem_destroy(&taken_sem);
 }
 
 void load_config(char *const filepath) {
@@ -189,6 +182,9 @@ int main(int argc, char *argv[]) {
     signal(SIGINT, sigexit_handler);
     signal(SIGALRM, alarm_handler);
 
+    sem_init(&slots_sem, 0, 1);
+    sem_init(&taken_sem, 0, 0);
+    sem_init(&free_sem, 0, N);
 
     pthread_t *producents = malloc(P * sizeof(pthread_t));
     pthread_t *consuments = malloc(K * sizeof(pthread_t));
@@ -209,20 +205,16 @@ int main(int argc, char *argv[]) {
     for (i = 0; i < P; i++)
         if (pthread_join(producents[i], NULL))
             err("Cannot join pthreads\n");
-    can_exit = 1;
 
-    while (1) {
-        pthread_mutex_lock(&count_buffer_mutex);
-        if (buffer_slots_taken == 0) {
-            while (client_exit_count != K) {
-                pthread_cond_signal(&empty_buffer_cond);
-                pthread_mutex_unlock(&count_buffer_mutex);
-            }
-            if (nk)
-                sleep(nk);
+
+    if (nk)
+        sleep(nk);
+    while (1)
+    {
+        sem_wait(&slots_sem);
+        if (buffer_slots_taken == 0)
             break;
-        }
-        pthread_mutex_unlock(&count_buffer_mutex);
+        sem_post(&slots_sem);
     }
     exit(EXIT_SUCCESS);
 }
